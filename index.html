@@ -1005,9 +1005,9 @@
     function armarMensajeWhatsApp(equipoNombre, faltantes) {
       if (faltantes.length === 0) return `CDP: ${equipoNombre} tiene todas las fichas completas!`;
       
-      let msg = `CDP Salud - ${equipoNombre}\n\nFaltan ${faltantes.length}:\n`;
-      faltantes.forEach(f => msg += `- ${f}\n`);
-      msg += `\nhttps://gr10-cdu.github.io/cdp-salud/`;
+      let msg = `*CDP Salud - ${equipoNombre}*\n\nFaltan ${faltantes.length}:\n`;
+      faltantes.forEach(f => msg += `• *${f}*\n`);
+      msg += `\nhttps://cdpcedelu.github.io/SaludCDP/`;
       return msg;
     }
     
