@@ -932,8 +932,9 @@
       elements.statCompletados.textContent = totalCompletados;
       elements.statFaltantes.textContent = totalJugadores - totalCompletados;
       
-      const libres = equipos.filter(e => !e.id.includes('_(S)'));
-      const seniors = equipos.filter(e => e.id.includes('_(S)'));
+      // Usar categoria del backend
+      const libres = equipos.filter(e => (e.categoria || '').toLowerCase() !== 'senior');
+      const seniors = equipos.filter(e => (e.categoria || '').toLowerCase() === 'senior');
       
       let html = '';
       if (libres.length > 0) {
