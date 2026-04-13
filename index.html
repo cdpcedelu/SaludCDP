@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDP - Ficha de Salud</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --cdp-azul: #2855A4;
+      --cdp-azul-dark: #1e4080;
+      --cdp-verde: #2E8B4A;
+      --cdp-verde-dark: #246b3a;
+      --bg-light: #f5f7fa;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --border: #e5e7eb;
+      --shadow: 0 4px 20px rgba(40, 85, 164, 0.12);
+      --shadow-lg: 0 8px 30px rgba(40, 85, 164, 0.18);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: linear-gradient(135deg, var(--cdp-azul) 0%, var(--cdp-azul-dark) 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-dark);
+    }
+    
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--white);
+    }
+    
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    
+    /* Card */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+    
+    /* Steps indicator */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    
+    .step-dot.active {
+      background: var(--cdp-azul);
+      transform: scale(1.2);
+    }
+    
+    .step-dot.completed {
+      background: var(--cdp-verde);
+    }
+    
+    /* Step content */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .step-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .step-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--cdp-azul);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    
+    /* Form elements */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    
+    .form-group label .required {
+      color: var(--error);
+      margin-left: 2px;
+    }
+    
+    select, input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--cdp-azul);
+      box-shadow: 0 0 0 3px rgba(40, 85, 164, 0.15);
+    }
+    
+    select:disabled, input:disabled {
+      background: var(--bg-light);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px 24px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-primary {
+      background: var(--cdp-azul);
+      color: var(--white);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: var(--cdp-azul-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-success {
+      background: var(--cdp-verde);
+      color: var(--white);
+    }
+    
+    .btn-success:hover:not(:disabled) {
+      background: var(--cdp-verde-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-back {
+      background: transparent;
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      margin-bottom: 10px;
+    }
+    
+    .btn-back:hover {
+      background: var(--bg-light);
+      border-color: var(--text-muted);
+    }
+    
+    /* Messages */
+    .message {
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    
+    .message.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .message.error {
+      background: var(--error-bg);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+    
+    .message.success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+    
+    /* Player info display */
+    .player-info {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--cdp-verde);
+    }
+    
+    .player-info .name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+    }
+    
+    .player-info .team {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* Loading spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Success screen */
+    .success-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      color: var(--success);
+    }
+    
+    .success-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--cdp-verde);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    
+    .success-screen p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 400px) {
+      body {
+        padding: 12px;
+      }
+      
+      .card {
+        padding: 20px 16px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Club de Profesionales</h1>
+      <p>Ficha de Salud - Temporada 2026</p>
+    </header>
+    
+    <main class="card">
+      <!-- Steps indicator -->
+      <div class="steps">
+        <div class="step-dot active" data-step="1"></div>
+        <div class="step-dot" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+        <div class="step-dot" data-step="4"></div>
+      </div>
+      
+      <!-- Error/Success messages -->
+      <div id="message" class="message"></div>
+      
+      <!-- Step 1: Select Team -->
+      <div id="step1" class="step-content active">
+        <h2 class="step-title">1. Seleccioná tu Equipo</h2>
+        <div class="form-group">
+          <label for="equipoSelect">Equipo <span class="required">*</span></label>
+          <select id="equipoSelect" disabled>
+            <option value="">Cargando equipos...</option>
+          </select>
+        </div>
+        <button id="btnStep1" class="btn btn-primary" disabled>
+          Continuar
+        </button>
+      </div>
+      
+      <!-- Step 2: Select Player -->
+      <div id="step2" class="step-content">
+        <h2 class="step-title">2. Seleccioná tu Nombre</h2>
+        <div class="form-group">
+          <label for="jugadorSelect">Jugador <span class="required">*</span></label>
+          <select id="jugadorSelect" disabled>
+            <option value="">Seleccioná un jugador...</option>
+          </select>
+        </div>
+        <button id="btnBack2" class="btn btn-back">← Volver</button>
+        <button id="btnStep2" class="btn btn-primary" disabled>
+          Continuar
+        </button>
+      </div>
+      
+      <!-- Step 3: Enter DNI -->
+      <div id="step3" class="step-content">
+        <h2 class="step-title">3. Ingresá tu DNI</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+          Tu DNI es tu clave personal para acceder a tus datos.
+        </p>
+        <div class="form-group">
+          <label for="dniInput">DNI (sin puntos) <span class="required">*</span></label>
+          <input type="text" id="dniInput" placeholder="Ej: 28008903" inputmode="numeric" pattern="[0-9]*" maxlength="10">
+        </div>
+        <button id="btnBack3" class="btn btn-back">← Volver</button>
+        <button id="btnStep3" class="btn btn-primary">
+          Validar DNI
+        </button>
+      </div>
+      
+      <!-- Step 4: Medical Form -->
+      <div id="step4" class="step-content">
+        <h2 class="step-title">4. Datos de Salud</h2>
+        
+        <div id="playerInfoDisplay" class="player-info" style="display: none;">
+          <div class="name" id="displayNombre"></div>
+          <div class="team" id="displayEquipo"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="grupoSanguineo">Grupo Sanguíneo <span class="required">*</span></label>
+          <select id="grupoSanguineo">
+            <option value="">Seleccioná...</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="condicionesMedicas">Condiciones Médicas <span class="required">*</span></label>
+          <textarea id="condicionesMedicas" placeholder="Ej: Asma, diabetes, alergias...">Ninguna</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="medicacion">Medicación Habitual <span class="required">*</span></label>
+          <textarea id="medicacion" placeholder="Ej: Ventolin, Metformina...">Ninguna</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="contactoNombre">Contacto de Emergencia - Nombre <span class="required">*</span></label>
+          <input type="text" id="contactoNombre" placeholder="Nombre y apellido">
+        </div>
+        
+        <div class="form-group">
+          <label for="contactoTel">Contacto de Emergencia - Teléfono <span class="required">*</span></label>
+          <input type="tel" id="contactoTel" placeholder="Ej: 3442123456" inputmode="tel">
+        </div>
+        
+        <div class="form-group">
+          <label for="obraSocial">Obra Social / Prepaga <span class="required">*</span></label>
+          <input type="text" id="obraSocial" placeholder="Ej: OSDE 310, SANCOR 3000">
+        </div>
+        
+        <button id="btnBack4" class="btn btn-back">← Volver al inicio</button>
+        <button id="btnGuardar" class="btn btn-success">
+          Guardar Datos
+        </button>
+      </div>
+      
+      <!-- Success Screen -->
+      <div id="stepSuccess" class="step-content">
+        <div class="success-screen">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2>¡Datos Guardados!</h2>
+          <p>Tu ficha de salud fue actualizada correctamente.</p>
+          <button id="btnNuevo" class="btn btn-primary">
+            Cargar otro jugador
+          </button>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="footer">
+      Club de Profesionales - Concepción del Uruguay<br>
+      Temporada 2026
+    </footer>
+  </div>
+  
+  <script>
+    // =====================================================
+    // CONFIGURACIÓN
+    // =====================================================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2rA6f2SsnVZbdHcl7PBEMmgQkgvRTlgQPgeaZ_X0E8UkAandOiRPemlkFLr1c2SDL/exec';
+    
+    // =====================================================
+    // ESTADO
+    // =====================================================
+    let state = {
+      equipos: [],
+      jugadores: [],
+      selectedEquipo: null,
+      selectedJugador: null,
+      jugadorInfo: null,
+      dniNuevo: null,
+      primeraCarga: false
+    };
+    
+    // =====================================================
+    // ELEMENTOS DOM
+    // =====================================================
+    const $ = id => document.getElementById(id);
+    
+    const elements = {
+      equipoSelect: $('equipoSelect'),
+      jugadorSelect: $('jugadorSelect'),
+      dniInput: $('dniInput'),
+      grupoSanguineo: $('grupoSanguineo'),
+      condicionesMedicas: $('condicionesMedicas'),
+      medicacion: $('medicacion'),
+      contactoNombre: $('contactoNombre'),
+      contactoTel: $('contactoTel'),
+      obraSocial: $('obraSocial'),
+      message: $('message'),
+      btnStep1: $('btnStep1'),
+      btnStep2: $('btnStep2'),
+      btnStep3: $('btnStep3'),
+      btnGuardar: $('btnGuardar'),
+      btnBack2: $('btnBack2'),
+      btnBack3: $('btnBack3'),
+      btnBack4: $('btnBack4'),
+      btnNuevo: $('btnNuevo'),
+      playerInfoDisplay: $('playerInfoDisplay'),
+      displayNombre: $('displayNombre'),
+      displayEquipo: $('displayEquipo')
+    };
+    
+    // =====================================================
+    // UTILIDADES
+    // =====================================================
+    function showMessage(text, type = 'error') {
+      elements.message.textContent = text;
+      elements.message.className = `message ${type} show`;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          elements.message.classList.remove('show');
+        }, 4000);
+      }
+    }
+    
+    function hideMessage() {
+      elements.message.classList.remove('show');
+    }
+    
+    function setLoading(button, loading) {
+      if (loading) {
+        button.disabled = true;
+        button.dataset.originalText = button.innerHTML;
+        button.innerHTML = '<div class="spinner"></div> Cargando...';
+      } else {
+        button.disabled = false;
+        button.innerHTML = button.dataset.originalText || button.innerHTML;
+      }
+    }
+    
+    function goToStep(stepNum) {
+      // Hide all steps
+      document.querySelectorAll('.step-content').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Show target step
+      const stepId = stepNum === 'success' ? 'stepSuccess' : `step${stepNum}`;
+      $(stepId).classList.add('active');
+      
+      // Update dots
+      document.querySelectorAll('.step-dot').forEach(dot => {
+        const dotStep = parseInt(dot.dataset.step);
+        dot.classList.remove('active', 'completed');
+        
+        if (stepNum === 'success') {
+          dot.classList.add('completed');
+        } else if (dotStep === stepNum) {
+          dot.classList.add('active');
+        } else if (dotStep < stepNum) {
+          dot.classList.add('completed');
+        }
+      });
+      
+      hideMessage();
+    }
+    
+    // =====================================================
+    // API CALLS
+    // =====================================================
+    async function fetchAPI(action, params = {}) {
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.append('action', action);
+      Object.keys(params).forEach(key => {
+        url.searchParams.append(key, params[key]);
+      });
+      
+      const response = await fetch(url.toString());
+      return response.json();
+    }
+    
+    async function postAPI(data) {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return response.json();
+    }
+    
+    // =====================================================
+    // STEP 1: Cargar equipos
+    // =====================================================
+    async function loadEquipos() {
+      try {
+        const result = await fetchAPI('getEquipos');
+        
+        if (result.success) {
+          state.equipos = result.data;
+          
+          elements.equipoSelect.innerHTML = '<option value="">Seleccioná tu equipo...</option>';
+          state.equipos.forEach(equipo => {
+            const option = document.createElement('option');
+            option.value = equipo.id;
+            option.textContent = equipo.nombre;
+            elements.equipoSelect.appendChild(option);
+          });
+          
+          elements.equipoSelect.disabled = false;
+        } else {
+          showMessage('Error al cargar equipos: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      }
+    }
+    
+    // =====================================================
+    // STEP 2: Cargar jugadores del equipo
+    // =====================================================
+    async function loadJugadores(equipoId) {
+      try {
+        setLoading(elements.btnStep1, true);
+        
+        const result = await fetchAPI('getJugadores', { equipoId });
+        
+        if (result.success) {
+          state.jugadores = result.data;
+          state.selectedEquipo = equipoId;
+          
+          elements.jugadorSelect.innerHTML = '<option value="">Seleccioná tu nombre...</option>';
+          state.jugadores.forEach(jugador => {
+            const option = document.createElement('option');
+            option.value = jugador.id;
+            option.textContent = jugador.nombre;
+            elements.jugadorSelect.appendChild(option);
+          });
+          
+          elements.jugadorSelect.disabled = false;
+          goToStep(2);
+        } else {
+          showMessage('Error al cargar jugadores: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnStep1, false);
+      }
+    }
+    
+    // =====================================================
+    // STEP 3: Validar DNI
+    // =====================================================
+    async function validarDNI() {
+      const dni = elements.dniInput.value.trim();
+      
+      if (!dni || dni.length < 6) {
+        showMessage('Ingresá tu DNI sin puntos.');
+        return;
+      }
+      
+      try {
+        setLoading(elements.btnStep3, true);
+        
+        const result = await postAPI({
+          action: 'validarDNI',
+          jugadorId: state.selectedJugador,
+          dni: dni
+        });
+        
+        if (result.success) {
+          state.jugadorInfo = result.jugador;
+          state.primeraCarga = result.primeraCarga;
+          state.dniNuevo = result.dniNuevo || null;
+          
+          // Mostrar info del jugador
+          elements.displayNombre.textContent = result.jugador.nombre;
+          const equipoNombre = state.equipos.find(e => e.id === state.selectedEquipo)?.nombre || state.selectedEquipo;
+          elements.displayEquipo.textContent = equipoNombre;
+          elements.playerInfoDisplay.style.display = 'block';
+          
+          // Precargar datos médicos si existen
+          if (result.datosMedicos) {
+            const dm = result.datosMedicos;
+            elements.grupoSanguineo.value = dm.grupoSanguineo || '';
+            elements.condicionesMedicas.value = dm.condicionesMedicas || 'Ninguna';
+            elements.medicacion.value = dm.medicacion || 'Ninguna';
+            elements.contactoNombre.value = dm.contactoNombre || '';
+            elements.contactoTel.value = dm.contactoTel || '';
+            elements.obraSocial.value = dm.obraSocial || '';
+          } else {
+            // Valores por defecto
+            elements.condicionesMedicas.value = 'Ninguna';
+            elements.medicacion.value = 'Ninguna';
+          }
+          
+          goToStep(4);
+        } else {
+          showMessage(result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnStep3, false);
+      }
+    }
+    
+    // =====================================================
+    // STEP 4: Guardar datos médicos
+    // =====================================================
+    async function guardarDatos() {
+      // Validar campos obligatorios
+      const campos = [
+        { el: elements.grupoSanguineo, name: 'Grupo Sanguíneo' },
+        { el: elements.condicionesMedicas, name: 'Condiciones Médicas' },
+        { el: elements.medicacion, name: 'Medicación' },
+        { el: elements.contactoNombre, name: 'Contacto - Nombre' },
+        { el: elements.contactoTel, name: 'Contacto - Teléfono' },
+        { el: elements.obraSocial, name: 'Obra Social' }
+      ];
+      
+      for (const campo of campos) {
+        if (!campo.el.value.trim()) {
+          showMessage(`Completá el campo: ${campo.name}`);
+          campo.el.focus();
+          return;
+        }
+      }
+      
+      try {
+        setLoading(elements.btnGuardar, true);
+        
+        const result = await postAPI({
+          action: 'guardarDatosMedicos',
+          jugadorId: state.selectedJugador,
+          grupoSanguineo: elements.grupoSanguineo.value,
+          condicionesMedicas: elements.condicionesMedicas.value.trim(),
+          medicacion: elements.medicacion.value.trim(),
+          contactoNombre: elements.contactoNombre.value.trim(),
+          contactoTel: elements.contactoTel.value.trim(),
+          obraSocial: elements.obraSocial.value.trim(),
+          dniNuevo: state.dniNuevo,
+          primeraCarga: state.primeraCarga
+        });
+        
+        if (result.success) {
+          goToStep('success');
+        } else {
+          showMessage('Error al guardar: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnGuardar, false);
+      }
+    }
+    
+    // =====================================================
+    // RESET
+    // =====================================================
+    function resetForm() {
+      state.selectedJugador = null;
+      state.jugadorInfo = null;
+      state.dniNuevo = null;
+      state.primeraCarga = false;
+      
+      elements.equipoSelect.value = '';
+      elements.jugadorSelect.value = '';
+      elements.jugadorSelect.disabled = true;
+      elements.dniInput.value = '';
+      elements.grupoSanguineo.value = '';
+      elements.condicionesMedicas.value = 'Ninguna';
+      elements.medicacion.value = 'Ninguna';
+      elements.contactoNombre.value = '';
+      elements.contactoTel.value = '';
+      elements.obraSocial.value = '';
+      elements.playerInfoDisplay.style.display = 'none';
+      
+      elements.btnStep1.disabled = true;
+      elements.btnStep2.disabled = true;
+      
+      goToStep(1);
+    }
+    
+    // =====================================================
+    // EVENT LISTENERS
+    // =====================================================
+    elements.equipoSelect.addEventListener('change', function() {
+      elements.btnStep1.disabled = !this.value;
+    });
+    
+    elements.jugadorSelect.addEventListener('change', function() {
+      state.selectedJugador = this.value;
+      elements.btnStep2.disabled = !this.value;
+    });
+    
+    elements.dniInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        validarDNI();
+      }
+    });
+    
+    elements.btnStep1.addEventListener('click', function() {
+      const equipoId = elements.equipoSelect.value;
+      if (equipoId) {
+        loadJugadores(equipoId);
+      }
+    });
+    
+    elements.btnStep2.addEventListener('click', function() {
+      if (state.selectedJugador) {
+        goToStep(3);
+        elements.dniInput.focus();
+      }
+    });
+    
+    elements.btnStep3.addEventListener('click', validarDNI);
+    
+    elements.btnGuardar.addEventListener('click', guardarDatos);
+    
+    elements.btnBack2.addEventListener('click', () => goToStep(1));
+    elements.btnBack3.addEventListener('click', () => goToStep(2));
+    elements.btnBack4.addEventListener('click', resetForm);
+    elements.btnNuevo.addEventListener('click', resetForm);
+    
+    // =====================================================
+    // INIT
+    // =====================================================
+    document.addEventListener('DOMContentLoaded', loadEquipos);
+  </script>
+</body>
+</html>
