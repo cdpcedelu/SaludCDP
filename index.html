@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CDP - Ficha de Salud</title>
   
+  <!-- Favicon hospital/medical SVG en base64 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjY0IiBmaWxsPSIjMjg1NUE0Ii8+PHBhdGggZD0iTTM1MiAxNzZoLTY0di02NGMwLTE3LjctMTQuMy0zMi0zMi0zMmgtMzJjLTE3LjcgMC0zMiAxNC4zLTMyIDMydjY0aC02NGMtMTcuNyAwLTMyIDE0LjMtMzIgMzJ2MzJjMCAxNy43IDE0LjMgMzIgMzIgMzJoNjR2NjRjMCAxNy43IDE0LjMgMzIgMzIgMzJoMzJjMTcuNyAwIDMyLTE0LjMgMzItMzJ2LTY0aDY0YzE3LjcgMCAzMi0xNC4zIDMyLTMydi0zMmMwLTE3LjctMTQuMy0zMi0zMi0zMnoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=">
+  
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +27,8 @@
       --error-bg: #fef2f2;
       --success: #16a34a;
       --success-bg: #f0fdf4;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
       --border: #e5e7eb;
       --shadow: 0 4px 20px rgba(40, 85, 164, 0.12);
       --shadow-lg: 0 8px 30px rgba(40, 85, 164, 0.18);
@@ -31,11 +36,7 @@
       --radius-sm: 8px;
     }
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Barlow', sans-serif;
@@ -45,18 +46,10 @@
       color: var(--text-dark);
     }
     
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-    }
+    .container { max-width: 480px; margin: 0 auto; }
+    .container.admin-mode { max-width: 800px; }
     
-    /* Header */
-    .header {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--white);
-    }
-    
+    .header { text-align: center; padding: 30px 20px; color: var(--white); }
     .header h1 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 2.5rem;
@@ -64,13 +57,20 @@
       margin-bottom: 8px;
       text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
+    .header p { font-size: 1rem; opacity: 0.9; }
     
-    .header p {
-      font-size: 1rem;
-      opacity: 0.9;
+    .admin-link {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
     }
+    .admin-link:hover { color: rgba(255,255,255,0.9); }
     
-    /* Card */
     .card {
       background: var(--white);
       border-radius: var(--radius);
@@ -79,40 +79,18 @@
       margin-bottom: 20px;
     }
     
-    /* Steps indicator */
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-    
+    .steps { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
     .step-dot {
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       background: var(--border);
       transition: all 0.3s ease;
     }
+    .step-dot.active { background: var(--cdp-azul); transform: scale(1.2); }
+    .step-dot.completed { background: var(--cdp-verde); }
     
-    .step-dot.active {
-      background: var(--cdp-azul);
-      transform: scale(1.2);
-    }
-    
-    .step-dot.completed {
-      background: var(--cdp-verde);
-    }
-    
-    /* Step content */
-    .step-content {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .step-content.active {
-      display: block;
-    }
+    .step-content { display: none; animation: fadeIn 0.3s ease; }
+    .step-content.active { display: block; }
     
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -127,11 +105,7 @@
       letter-spacing: 1px;
     }
     
-    /* Form elements */
-    .form-group {
-      margin-bottom: 18px;
-    }
-    
+    .form-group { margin-bottom: 18px; }
     .form-group label {
       display: block;
       font-weight: 600;
@@ -139,11 +113,7 @@
       color: var(--text-dark);
       margin-bottom: 6px;
     }
-    
-    .form-group label .required {
-      color: var(--error);
-      margin-left: 2px;
-    }
+    .form-group label .required { color: var(--error); margin-left: 2px; }
     
     select, input, textarea {
       width: 100%;
@@ -168,10 +138,7 @@
       cursor: pointer;
     }
     
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+    textarea { resize: vertical; min-height: 80px; }
     
     select:focus, input:focus, textarea:focus {
       outline: none;
@@ -185,7 +152,6 @@
       opacity: 0.7;
     }
     
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -204,33 +170,21 @@
       letter-spacing: 0.5px;
     }
     
-    .btn-primary {
-      background: var(--cdp-azul);
-      color: var(--white);
-    }
-    
+    .btn-primary { background: var(--cdp-azul); color: var(--white); }
     .btn-primary:hover:not(:disabled) {
       background: var(--cdp-azul-dark);
       transform: translateY(-1px);
       box-shadow: var(--shadow);
     }
     
-    .btn-success {
-      background: var(--cdp-verde);
-      color: var(--white);
-    }
-    
+    .btn-success { background: var(--cdp-verde); color: var(--white); }
     .btn-success:hover:not(:disabled) {
       background: var(--cdp-verde-dark);
       transform: translateY(-1px);
       box-shadow: var(--shadow);
     }
     
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     
     .btn-back {
       background: transparent;
@@ -238,13 +192,20 @@
       border: 2px solid var(--border);
       margin-bottom: 10px;
     }
+    .btn-back:hover { background: var(--bg-light); border-color: var(--text-muted); }
     
-    .btn-back:hover {
-      background: var(--bg-light);
-      border-color: var(--text-muted);
+    .btn-whatsapp {
+      background: #25D366;
+      color: var(--white);
+      width: auto;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      text-decoration: none;
     }
+    .btn-whatsapp:hover { background: #1fb855; }
     
-    /* Messages */
+    .btn-sm { padding: 10px 16px; font-size: 0.875rem; }
+    
     .message {
       padding: 14px 16px;
       border-radius: var(--radius-sm);
@@ -252,25 +213,10 @@
       margin-bottom: 16px;
       display: none;
     }
+    .message.show { display: block; animation: fadeIn 0.3s ease; }
+    .message.error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error); }
+    .message.success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
     
-    .message.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .message.error {
-      background: var(--error-bg);
-      color: var(--error);
-      border: 1px solid var(--error);
-    }
-    
-    .message.success {
-      background: var(--success-bg);
-      color: var(--success);
-      border: 1px solid var(--success);
-    }
-    
-    /* Player info display */
     .player-info {
       background: var(--bg-light);
       border-radius: var(--radius-sm);
@@ -278,42 +224,21 @@
       margin-bottom: 20px;
       border-left: 4px solid var(--cdp-verde);
     }
+    .player-info .name { font-weight: 700; font-size: 1.1rem; color: var(--text-dark); }
+    .player-info .team { font-size: 0.875rem; color: var(--text-muted); margin-top: 4px; }
     
-    .player-info .name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--text-dark);
-    }
-    
-    .player-info .team {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    
-    /* Loading spinner */
     .spinner {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: var(--white);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    /* Success screen */
-    .success-screen {
-      text-align: center;
-      padding: 20px 0;
-    }
-    
+    .success-screen { text-align: center; padding: 20px 0; }
     .success-icon {
-      width: 80px;
-      height: 80px;
+      width: 80px; height: 80px;
       background: var(--success-bg);
       border-radius: 50%;
       display: flex;
@@ -321,13 +246,7 @@
       justify-content: center;
       margin: 0 auto 20px;
     }
-    
-    .success-icon svg {
-      width: 40px;
-      height: 40px;
-      color: var(--success);
-    }
-    
+    .success-icon svg { width: 40px; height: 40px; color: var(--success); }
     .success-screen h2 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.8rem;
@@ -335,13 +254,8 @@
       margin-bottom: 10px;
       letter-spacing: 1px;
     }
+    .success-screen p { color: var(--text-muted); margin-bottom: 24px; }
     
-    .success-screen p {
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-    
-    /* Footer */
     .footer {
       text-align: center;
       padding: 20px;
@@ -349,31 +263,157 @@
       font-size: 0.8rem;
     }
     
-    /* Responsive */
+    /* ADMIN STYLES */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--cdp-azul);
+      letter-spacing: 1px;
+    }
+    
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--cdp-azul);
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card.success .number { color: var(--success); }
+    .stat-card.warning .number { color: var(--warning); }
+    
+    .equipo-card {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--border);
+    }
+    .equipo-card.completo { border-left-color: var(--success); }
+    .equipo-card.parcial { border-left-color: var(--warning); }
+    .equipo-card.vacio { border-left-color: var(--error); }
+    
+    .equipo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .equipo-nombre { font-weight: 700; font-size: 1rem; }
+    .equipo-delegado { font-size: 0.8rem; color: var(--text-muted); }
+    .equipo-contador { font-size: 0.875rem; color: var(--text-muted); }
+    .equipo-contador strong { color: var(--cdp-verde); }
+    
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      background: var(--cdp-verde);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .faltantes-list {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .faltantes-list.show { display: block; }
+    .faltantes-list h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .faltantes-list ul {
+      list-style: none;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+    .faltantes-list li {
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .faltantes-list li:last-child { border-bottom: none; }
+    
+    .equipo-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    
+    .btn-toggle {
+      background: transparent;
+      color: var(--cdp-azul);
+      border: 1px solid var(--cdp-azul);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      width: auto;
+    }
+    .btn-toggle:hover { background: var(--cdp-azul); color: var(--white); }
+    
+    .section-divider {
+      text-align: center;
+      margin: 24px 0 16px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: var(--cdp-azul);
+      letter-spacing: 1px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '—';
+      margin: 0 10px;
+      opacity: 0.3;
+    }
+    
     @media (max-width: 400px) {
-      body {
-        padding: 12px;
-      }
-      
-      .card {
-        padding: 20px 16px;
-      }
-      
-      .header h1 {
-        font-size: 2rem;
-      }
+      body { padding: 12px; }
+      .card { padding: 20px 16px; }
+      .header h1 { font-size: 2rem; }
+      .admin-stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainContainer">
+    <a class="admin-link" id="adminLink">⚙️ Admin</a>
+    
     <header class="header">
       <h1>Club de Profesionales</h1>
-      <p>Ficha de Salud - Temporada 2026</p>
+      <p id="headerSubtitle">Ficha de Salud - Temporada 2026</p>
     </header>
     
-    <main class="card">
-      <!-- Steps indicator -->
+    <!-- FORMULARIO JUGADORES -->
+    <main class="card" id="playerForm">
       <div class="steps">
         <div class="step-dot active" data-step="1"></div>
         <div class="step-dot" data-step="2"></div>
@@ -381,10 +421,9 @@
         <div class="step-dot" data-step="4"></div>
       </div>
       
-      <!-- Error/Success messages -->
       <div id="message" class="message"></div>
       
-      <!-- Step 1: Select Team -->
+      <!-- Step 1 -->
       <div id="step1" class="step-content active">
         <h2 class="step-title">1. Seleccioná tu Equipo</h2>
         <div class="form-group">
@@ -393,12 +432,10 @@
             <option value="">Cargando equipos...</option>
           </select>
         </div>
-        <button id="btnStep1" class="btn btn-primary" disabled>
-          Continuar
-        </button>
+        <button id="btnStep1" class="btn btn-primary" disabled>Continuar</button>
       </div>
       
-      <!-- Step 2: Select Player -->
+      <!-- Step 2 -->
       <div id="step2" class="step-content">
         <h2 class="step-title">2. Seleccioná tu Nombre</h2>
         <div class="form-group">
@@ -408,12 +445,10 @@
           </select>
         </div>
         <button id="btnBack2" class="btn btn-back">← Volver</button>
-        <button id="btnStep2" class="btn btn-primary" disabled>
-          Continuar
-        </button>
+        <button id="btnStep2" class="btn btn-primary" disabled>Continuar</button>
       </div>
       
-      <!-- Step 3: Enter DNI -->
+      <!-- Step 3 -->
       <div id="step3" class="step-content">
         <h2 class="step-title">3. Ingresá tu DNI</h2>
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
@@ -424,12 +459,10 @@
           <input type="text" id="dniInput" placeholder="Ej: 28008903" inputmode="numeric" pattern="[0-9]*" maxlength="10">
         </div>
         <button id="btnBack3" class="btn btn-back">← Volver</button>
-        <button id="btnStep3" class="btn btn-primary">
-          Validar DNI
-        </button>
+        <button id="btnStep3" class="btn btn-primary">Validar DNI</button>
       </div>
       
-      <!-- Step 4: Medical Form -->
+      <!-- Step 4 -->
       <div id="step4" class="step-content">
         <h2 class="step-title">4. Datos de Salud</h2>
         
@@ -450,6 +483,7 @@
             <option value="AB-">AB-</option>
             <option value="O+">O+</option>
             <option value="O-">O-</option>
+            <option value="No sé">No sé</option>
           </select>
         </div>
         
@@ -479,12 +513,10 @@
         </div>
         
         <button id="btnBack4" class="btn btn-back">← Volver al inicio</button>
-        <button id="btnGuardar" class="btn btn-success">
-          Guardar Datos
-        </button>
+        <button id="btnGuardar" class="btn btn-success">Guardar Datos</button>
       </div>
       
-      <!-- Success Screen -->
+      <!-- Success -->
       <div id="stepSuccess" class="step-content">
         <div class="success-screen">
           <div class="success-icon">
@@ -494,12 +526,52 @@
           </div>
           <h2>¡Datos Guardados!</h2>
           <p>Tu ficha de salud fue actualizada correctamente.</p>
-          <button id="btnNuevo" class="btn btn-primary">
-            Cargar otro jugador
-          </button>
+          <button id="btnNuevo" class="btn btn-primary">Cargar otro jugador</button>
         </div>
       </div>
     </main>
+    
+    <!-- PANEL ADMIN -->
+    <div class="card admin-panel" id="adminPanel">
+      <!-- Admin Login -->
+      <div id="adminLogin" class="step-content active">
+        <h2 class="step-title">Acceso Administrador</h2>
+        <div id="adminMessage" class="message"></div>
+        <div class="form-group">
+          <label for="adminClave">Clave <span class="required">*</span></label>
+          <input type="password" id="adminClave" placeholder="Ingresá la clave" inputmode="numeric">
+        </div>
+        <button id="btnAdminLogin" class="btn btn-primary">Ingresar</button>
+        <button id="btnAdminBack" class="btn btn-back" style="margin-top: 10px;">← Volver al formulario</button>
+      </div>
+      
+      <!-- Admin Dashboard -->
+      <div id="adminDashboard" class="step-content">
+        <div class="admin-header">
+          <h2>Estado de Fichas</h2>
+          <button id="btnRefresh" class="btn btn-primary btn-sm" style="width: auto;">🔄 Actualizar</button>
+        </div>
+        
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="number" id="statTotal">-</div>
+            <div class="label">Total</div>
+          </div>
+          <div class="stat-card success">
+            <div class="number" id="statCompletados">-</div>
+            <div class="label">Completados</div>
+          </div>
+          <div class="stat-card warning">
+            <div class="number" id="statFaltantes">-</div>
+            <div class="label">Faltantes</div>
+          </div>
+        </div>
+        
+        <div id="equiposList"></div>
+        
+        <button id="btnAdminLogout" class="btn btn-back" style="margin-top: 20px;">← Cerrar sesión</button>
+      </div>
+    </div>
     
     <footer class="footer">
       Club de Profesionales - Concepción del Uruguay<br>
@@ -508,14 +580,8 @@
   </div>
   
   <script>
-    // =====================================================
-    // CONFIGURACIÓN
-    // =====================================================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2rA6f2SsnVZbdHcl7PBEMmgQkgvRTlgQPgeaZ_X0E8UkAandOiRPemlkFLr1c2SDL/exec';
     
-    // =====================================================
-    // ESTADO
-    // =====================================================
     let state = {
       equipos: [],
       jugadores: [],
@@ -523,15 +589,19 @@
       selectedJugador: null,
       jugadorInfo: null,
       dniNuevo: null,
-      primeraCarga: false
+      primeraCarga: false,
+      adminClave: null,
+      isAdmin: false
     };
     
-    // =====================================================
-    // ELEMENTOS DOM
-    // =====================================================
     const $ = id => document.getElementById(id);
     
     const elements = {
+      mainContainer: $('mainContainer'),
+      playerForm: $('playerForm'),
+      adminPanel: $('adminPanel'),
+      adminLink: $('adminLink'),
+      headerSubtitle: $('headerSubtitle'),
       equipoSelect: $('equipoSelect'),
       jugadorSelect: $('jugadorSelect'),
       dniInput: $('dniInput'),
@@ -552,25 +622,30 @@
       btnNuevo: $('btnNuevo'),
       playerInfoDisplay: $('playerInfoDisplay'),
       displayNombre: $('displayNombre'),
-      displayEquipo: $('displayEquipo')
+      displayEquipo: $('displayEquipo'),
+      adminLogin: $('adminLogin'),
+      adminDashboard: $('adminDashboard'),
+      adminClave: $('adminClave'),
+      adminMessage: $('adminMessage'),
+      btnAdminLogin: $('btnAdminLogin'),
+      btnAdminBack: $('btnAdminBack'),
+      btnAdminLogout: $('btnAdminLogout'),
+      btnRefresh: $('btnRefresh'),
+      equiposList: $('equiposList'),
+      statTotal: $('statTotal'),
+      statCompletados: $('statCompletados'),
+      statFaltantes: $('statFaltantes')
     };
     
-    // =====================================================
-    // UTILIDADES
-    // =====================================================
-    function showMessage(text, type = 'error') {
-      elements.message.textContent = text;
-      elements.message.className = `message ${type} show`;
-      
-      if (type === 'success') {
-        setTimeout(() => {
-          elements.message.classList.remove('show');
-        }, 4000);
-      }
+    function showMessage(text, type = 'error', elementId = 'message') {
+      const el = $(elementId);
+      el.textContent = text;
+      el.className = `message ${type} show`;
+      if (type === 'success') setTimeout(() => el.classList.remove('show'), 4000);
     }
     
-    function hideMessage() {
-      elements.message.classList.remove('show');
+    function hideMessage(elementId = 'message') {
+      $(elementId).classList.remove('show');
     }
     
     function setLoading(button, loading) {
@@ -585,65 +660,41 @@
     }
     
     function goToStep(stepNum) {
-      // Hide all steps
-      document.querySelectorAll('.step-content').forEach(el => {
-        el.classList.remove('active');
-      });
-      
-      // Show target step
+      document.querySelectorAll('#playerForm .step-content').forEach(el => el.classList.remove('active'));
       const stepId = stepNum === 'success' ? 'stepSuccess' : `step${stepNum}`;
       $(stepId).classList.add('active');
       
-      // Update dots
       document.querySelectorAll('.step-dot').forEach(dot => {
         const dotStep = parseInt(dot.dataset.step);
         dot.classList.remove('active', 'completed');
-        
-        if (stepNum === 'success') {
-          dot.classList.add('completed');
-        } else if (dotStep === stepNum) {
-          dot.classList.add('active');
-        } else if (dotStep < stepNum) {
-          dot.classList.add('completed');
-        }
+        if (stepNum === 'success') dot.classList.add('completed');
+        else if (dotStep === stepNum) dot.classList.add('active');
+        else if (dotStep < stepNum) dot.classList.add('completed');
       });
-      
       hideMessage();
     }
     
-    // =====================================================
-    // API CALLS
-    // =====================================================
     async function fetchAPI(action, params = {}) {
       const url = new URL(SCRIPT_URL);
       url.searchParams.append('action', action);
-      Object.keys(params).forEach(key => {
-        url.searchParams.append(key, params[key]);
-      });
-      
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
       const response = await fetch(url.toString());
       return response.json();
     }
     
     async function postAPI(data) {
-      const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      // Apps Script CORS workaround: usar GET con datos en query string
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.append('payload', JSON.stringify(data));
+      const response = await fetch(url.toString());
       return response.json();
     }
     
-    // =====================================================
-    // STEP 1: Cargar equipos
-    // =====================================================
     async function loadEquipos() {
       try {
         const result = await fetchAPI('getEquipos');
-        
         if (result.success) {
           state.equipos = result.data;
-          
           elements.equipoSelect.innerHTML = '<option value="">Seleccioná tu equipo...</option>';
           state.equipos.forEach(equipo => {
             const option = document.createElement('option');
@@ -651,7 +702,6 @@
             option.textContent = equipo.nombre;
             elements.equipoSelect.appendChild(option);
           });
-          
           elements.equipoSelect.disabled = false;
         } else {
           showMessage('Error al cargar equipos: ' + result.error);
@@ -662,19 +712,13 @@
       }
     }
     
-    // =====================================================
-    // STEP 2: Cargar jugadores del equipo
-    // =====================================================
     async function loadJugadores(equipoId) {
       try {
         setLoading(elements.btnStep1, true);
-        
         const result = await fetchAPI('getJugadores', { equipoId });
-        
         if (result.success) {
           state.jugadores = result.data;
           state.selectedEquipo = equipoId;
-          
           elements.jugadorSelect.innerHTML = '<option value="">Seleccioná tu nombre...</option>';
           state.jugadores.forEach(jugador => {
             const option = document.createElement('option');
@@ -682,7 +726,6 @@
             option.textContent = jugador.nombre;
             elements.jugadorSelect.appendChild(option);
           });
-          
           elements.jugadorSelect.disabled = false;
           goToStep(2);
         } else {
@@ -696,12 +739,8 @@
       }
     }
     
-    // =====================================================
-    // STEP 3: Validar DNI
-    // =====================================================
     async function validarDNI() {
       const dni = elements.dniInput.value.trim();
-      
       if (!dni || dni.length < 6) {
         showMessage('Ingresá tu DNI sin puntos.');
         return;
@@ -709,7 +748,6 @@
       
       try {
         setLoading(elements.btnStep3, true);
-        
         const result = await postAPI({
           action: 'validarDNI',
           jugadorId: state.selectedJugador,
@@ -721,13 +759,11 @@
           state.primeraCarga = result.primeraCarga;
           state.dniNuevo = result.dniNuevo || null;
           
-          // Mostrar info del jugador
           elements.displayNombre.textContent = result.jugador.nombre;
           const equipoNombre = state.equipos.find(e => e.id === state.selectedEquipo)?.nombre || state.selectedEquipo;
           elements.displayEquipo.textContent = equipoNombre;
           elements.playerInfoDisplay.style.display = 'block';
           
-          // Precargar datos médicos si existen
           if (result.datosMedicos) {
             const dm = result.datosMedicos;
             elements.grupoSanguineo.value = dm.grupoSanguineo || '';
@@ -737,11 +773,9 @@
             elements.contactoTel.value = dm.contactoTel || '';
             elements.obraSocial.value = dm.obraSocial || '';
           } else {
-            // Valores por defecto
             elements.condicionesMedicas.value = 'Ninguna';
             elements.medicacion.value = 'Ninguna';
           }
-          
           goToStep(4);
         } else {
           showMessage(result.error);
@@ -754,11 +788,7 @@
       }
     }
     
-    // =====================================================
-    // STEP 4: Guardar datos médicos
-    // =====================================================
     async function guardarDatos() {
-      // Validar campos obligatorios
       const campos = [
         { el: elements.grupoSanguineo, name: 'Grupo Sanguíneo' },
         { el: elements.condicionesMedicas, name: 'Condiciones Médicas' },
@@ -778,7 +808,6 @@
       
       try {
         setLoading(elements.btnGuardar, true);
-        
         const result = await postAPI({
           action: 'guardarDatosMedicos',
           jugadorId: state.selectedJugador,
@@ -805,9 +834,6 @@
       }
     }
     
-    // =====================================================
-    // RESET
-    // =====================================================
     function resetForm() {
       state.selectedJugador = null;
       state.jugadorInfo = null;
@@ -825,16 +851,167 @@
       elements.contactoTel.value = '';
       elements.obraSocial.value = '';
       elements.playerInfoDisplay.style.display = 'none';
-      
       elements.btnStep1.disabled = true;
       elements.btnStep2.disabled = true;
-      
       goToStep(1);
     }
     
-    // =====================================================
-    // EVENT LISTENERS
-    // =====================================================
+    // ADMIN
+    function showAdminPanel() {
+      elements.playerForm.style.display = 'none';
+      elements.adminPanel.classList.add('active');
+      elements.mainContainer.classList.add('admin-mode');
+      elements.headerSubtitle.textContent = 'Panel de Administración';
+      elements.adminLink.style.display = 'none';
+    }
+    
+    function hideAdminPanel() {
+      elements.playerForm.style.display = 'block';
+      elements.adminPanel.classList.remove('active');
+      elements.mainContainer.classList.remove('admin-mode');
+      elements.headerSubtitle.textContent = 'Ficha de Salud - Temporada 2026';
+      elements.adminLink.style.display = 'block';
+      elements.adminLogin.classList.add('active');
+      elements.adminDashboard.classList.remove('active');
+      elements.adminClave.value = '';
+      state.adminClave = null;
+      state.isAdmin = false;
+    }
+    
+    async function adminLoginFn() {
+      const clave = elements.adminClave.value.trim();
+      if (!clave) {
+        showMessage('Ingresá la clave', 'error', 'adminMessage');
+        return;
+      }
+      
+      try {
+        setLoading(elements.btnAdminLogin, true);
+        const result = await postAPI({ action: 'adminLogin', clave });
+        if (result.success) {
+          state.adminClave = clave;
+          state.isAdmin = true;
+          elements.adminLogin.classList.remove('active');
+          elements.adminDashboard.classList.add('active');
+          hideMessage('adminMessage');
+          loadEstadoEquipos();
+        } else {
+          showMessage(result.error, 'error', 'adminMessage');
+        }
+      } catch (error) {
+        showMessage('Error de conexión', 'error', 'adminMessage');
+      } finally {
+        setLoading(elements.btnAdminLogin, false);
+      }
+    }
+    
+    async function loadEstadoEquipos() {
+      try {
+        setLoading(elements.btnRefresh, true);
+        const result = await postAPI({ action: 'getEstadoEquipos', clave: state.adminClave });
+        if (result.success) {
+          renderEstadoEquipos(result.data);
+        } else {
+          showMessage(result.error, 'error', 'adminMessage');
+        }
+      } catch (error) {
+        showMessage('Error de conexión', 'error', 'adminMessage');
+      } finally {
+        setLoading(elements.btnRefresh, false);
+      }
+    }
+    
+    function renderEstadoEquipos(equipos) {
+      let totalJugadores = 0, totalCompletados = 0;
+      equipos.forEach(eq => {
+        totalJugadores += eq.total;
+        totalCompletados += eq.completados;
+      });
+      
+      elements.statTotal.textContent = totalJugadores;
+      elements.statCompletados.textContent = totalCompletados;
+      elements.statFaltantes.textContent = totalJugadores - totalCompletados;
+      
+      const libres = equipos.filter(e => !e.id.includes('_(S)'));
+      const seniors = equipos.filter(e => e.id.includes('_(S)'));
+      
+      let html = '';
+      if (libres.length > 0) {
+        html += '<div class="section-divider">Categoría Libre</div>';
+        libres.forEach(eq => html += renderEquipoCard(eq));
+      }
+      if (seniors.length > 0) {
+        html += '<div class="section-divider">Categoría Senior</div>';
+        seniors.forEach(eq => html += renderEquipoCard(eq));
+      }
+      
+      elements.equiposList.innerHTML = html;
+      
+      document.querySelectorAll('.btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const list = this.closest('.equipo-card').querySelector('.faltantes-list');
+          list.classList.toggle('show');
+          this.textContent = list.classList.contains('show') ? 'Ocultar' : 'Ver faltantes';
+        });
+      });
+    }
+    
+    function renderEquipoCard(equipo) {
+      const pct = equipo.total > 0 ? Math.round((equipo.completados / equipo.total) * 100) : 0;
+      const faltantes = equipo.faltantes || [];
+      
+      let statusClass = 'vacio';
+      if (pct === 100) statusClass = 'completo';
+      else if (pct > 0) statusClass = 'parcial';
+      
+      // WhatsApp directo al delegado si tiene teléfono
+      const whatsappMsg = armarMensajeWhatsApp(equipo.nombre, faltantes);
+      const tel = equipo.telefonoDelegado || '';
+      const whatsappUrl = tel 
+        ? `https://wa.me/${tel}?text=${encodeURIComponent(whatsappMsg)}`
+        : `https://wa.me/?text=${encodeURIComponent(whatsappMsg)}`;
+      
+      const delegadoInfo = equipo.nombreDelegado ? `<div class="equipo-delegado">Delegado: ${equipo.nombreDelegado}</div>` : '';
+      
+      let faltantesHtml = '';
+      if (faltantes.length > 0) {
+        faltantesHtml = `
+          <div class="faltantes-list">
+            <h4>Faltantes (${faltantes.length})</h4>
+            <ul>${faltantes.map(f => `<li>${f}</li>`).join('')}</ul>
+          </div>
+          <div class="equipo-actions">
+            <button class="btn btn-toggle">Ver faltantes</button>
+            <a href="${whatsappUrl}" target="_blank" class="btn btn-whatsapp">📱 WhatsApp</a>
+          </div>
+        `;
+      }
+      
+      return `
+        <div class="equipo-card ${statusClass}">
+          <div class="equipo-header">
+            <div>
+              <span class="equipo-nombre">${equipo.nombre}</span>
+              ${delegadoInfo}
+            </div>
+            <span class="equipo-contador"><strong>${equipo.completados}</strong> / ${equipo.total}</span>
+          </div>
+          <div class="progress-bar"><div class="fill" style="width: ${pct}%"></div></div>
+          ${faltantesHtml}
+        </div>
+      `;
+    }
+    
+    function armarMensajeWhatsApp(equipoNombre, faltantes) {
+      if (faltantes.length === 0) return `CDP: ${equipoNombre} tiene todas las fichas completas!`;
+      
+      let msg = `CDP Salud - ${equipoNombre}\n\nFaltan ${faltantes.length}:\n`;
+      faltantes.forEach(f => msg += `- ${f}\n`);
+      msg += `\nhttps://gr10-cdu.github.io/cdp-salud/`;
+      return msg;
+    }
+    
+    // EVENTS
     elements.equipoSelect.addEventListener('change', function() {
       elements.btnStep1.disabled = !this.value;
     });
@@ -844,38 +1021,23 @@
       elements.btnStep2.disabled = !this.value;
     });
     
-    elements.dniInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        validarDNI();
-      }
-    });
-    
-    elements.btnStep1.addEventListener('click', function() {
-      const equipoId = elements.equipoSelect.value;
-      if (equipoId) {
-        loadJugadores(equipoId);
-      }
-    });
-    
-    elements.btnStep2.addEventListener('click', function() {
-      if (state.selectedJugador) {
-        goToStep(3);
-        elements.dniInput.focus();
-      }
-    });
-    
+    elements.dniInput.addEventListener('keypress', e => { if (e.key === 'Enter') validarDNI(); });
+    elements.btnStep1.addEventListener('click', () => { if (elements.equipoSelect.value) loadJugadores(elements.equipoSelect.value); });
+    elements.btnStep2.addEventListener('click', () => { if (state.selectedJugador) { goToStep(3); elements.dniInput.focus(); } });
     elements.btnStep3.addEventListener('click', validarDNI);
-    
     elements.btnGuardar.addEventListener('click', guardarDatos);
-    
     elements.btnBack2.addEventListener('click', () => goToStep(1));
     elements.btnBack3.addEventListener('click', () => goToStep(2));
     elements.btnBack4.addEventListener('click', resetForm);
     elements.btnNuevo.addEventListener('click', resetForm);
     
-    // =====================================================
-    // INIT
-    // =====================================================
+    elements.adminLink.addEventListener('click', showAdminPanel);
+    elements.btnAdminBack.addEventListener('click', hideAdminPanel);
+    elements.btnAdminLogout.addEventListener('click', hideAdminPanel);
+    elements.btnAdminLogin.addEventListener('click', adminLoginFn);
+    elements.btnRefresh.addEventListener('click', loadEstadoEquipos);
+    elements.adminClave.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginFn(); });
+    
     document.addEventListener('DOMContentLoaded', loadEquipos);
   </script>
 </body>
