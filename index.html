@@ -1,3300 +1,1076 @@
 <!DOCTYPE html>
-<!-- PAGOS HOCKEY CDP — Frontend v2.1 — 2025-04-15 21:35 ARG -->
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#56c596">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Hockey CDP">
-<title>Pagos Hockey CDP</title>
-
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2356c596'/><text y='.9em' x='50%' text-anchor='middle' font-size='70'>🏑</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2356c596'/><text y='.9em' x='50%' text-anchor='middle' font-size='70'>🏑</text></svg>">
-
-<!-- PWA Manifest - eliminado inline por problemas de URL -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --mint: #a8e6cf;
-  --mint-dark: #56c596;
-  --mint-light: #dffff0;
-  --lavender: #d4a5ff;
-  --lavender-dark: #b57edc;
-  --lavender-light: #f3e5ff;
-  --peach: #ffb7b2;
-  --peach-dark: #ff8a80;
-  --peach-light: #ffe5e3;
-  --sky: #a0d2ff;
-  --sky-dark: #64b5f6;
-  --sky-light: #e3f2fd;
-  --lemon: #fff59d;
-  --lemon-dark: #fdd835;
-  --white: #ffffff;
-  --gray-50: #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-200: #eeeeee;
-  --gray-300: #e0e0e0;
-  --gray-400: #bdbdbd;
-  --gray-500: #9e9e9e;
-  --gray-600: #757575;
-  --gray-700: #616161;
-  --gray-800: #424242;
-  --gray-900: #212121;
-  --success: #66bb6a;
-  --warning: #ffca28;
-  --danger: #ef5350;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 4px 20px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; }
-body {
-  font-family: 'Nunito', sans-serif;
-  background: linear-gradient(135deg, var(--mint-light) 0%, var(--sky-light) 50%, var(--lavender-light) 100%);
-  min-height: 100vh;
-  color: var(--gray-800);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* SPLASH & LOGIN */
-/* ══════════════════════════════════════════════════════════════════ */
-#splash-screen {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-.spinner {
-  width: 48px; height: 48px;
-  border: 4px solid var(--mint);
-  border-top-color: var(--mint-dark);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-#splash-screen p { color: var(--gray-600); font-weight: 600; }
-
-#login-screen {
-  min-height: 100vh;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.login-card {
-  background: var(--white);
-  border-radius: 24px;
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-}
-.login-logo {
-  width: 100px; height: 100px;
-  background: linear-gradient(135deg, var(--mint) 0%, var(--sky) 100%);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 48px;
-}
-.login-card h1 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--mint-dark) 0%, var(--sky-dark) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 4px;
-}
-.login-card .subtitle {
-  font-size: 0.9rem;
-  color: var(--gray-500);
-  margin-bottom: 32px;
-}
-.login-tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--gray-100);
-  border-radius: var(--radius-sm);
-  padding: 4px;
-  margin-bottom: 24px;
-}
-.login-tab {
-  flex: 1;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: transparent;
-  color: var(--gray-500);
-  transition: all 0.2s;
-}
-.login-tab.active {
-  background: var(--white);
-  color: var(--mint-dark);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.form-group { margin-bottom: 16px; text-align: left; }
-.form-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--gray-600);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.form-group input, .form-group select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 1rem;
-  color: var(--gray-800);
-  background: var(--white);
-  transition: all 0.2s;
-  outline: none;
-}
-.form-group input:focus, .form-group select:focus {
-  border-color: var(--mint-dark);
-  box-shadow: 0 0 0 4px rgba(86, 197, 150, 0.15);
-}
-.pin-input {
-  font-size: 1.5rem !important;
-  letter-spacing: 0.4em;
-  text-align: center;
-  font-weight: 700;
-}
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--mint-dark) 0%, var(--sky-dark) 100%);
-  color: var(--white);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(86, 197, 150, 0.4);
-  margin-top: 8px;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(86, 197, 150, 0.5); }
-.btn-primary:active { transform: translateY(0); }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.login-error {
-  background: var(--peach-light);
-  border: 2px solid var(--peach);
-  color: var(--danger);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 16px;
-  display: none;
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* APP SHELL */
-/* ══════════════════════════════════════════════════════════════════ */
-#app { display: none; min-height: 100vh; flex-direction: column; }
-
-.header {
-  background: linear-gradient(135deg, var(--mint-dark) 0%, var(--sky-dark) 100%);
-  color: var(--white);
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 20px rgba(86, 197, 150, 0.3);
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
-.header-logo {
-  width: 40px; height: 40px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-}
-.header-info h1 { font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
-.header-info span { font-size: 0.75rem; opacity: 0.85; }
-.header-right { display: flex; align-items: center; gap: 12px; }
-.badge-role {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.badge-delegado { background: rgba(255,255,255,0.2); }
-.badge-admin { background: var(--lemon); color: var(--gray-800); }
-.btn-logout {
-  background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.3);
-  color: var(--white);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-logout:hover { background: rgba(255,255,255,0.25); }
-
-/* Navegación */
-.nav-tabs {
-  background: var(--white);
-  border-bottom: 2px solid var(--gray-200);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.nav-tabs::-webkit-scrollbar {
-  display: none;
-}
-.nav-tab {
-  padding: 14px 18px;
-  border: none;
-  background: transparent;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gray-500);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.nav-tab.active {
-  color: var(--mint-dark);
-  border-bottom-color: var(--mint-dark);
-}
-.nav-tab:hover:not(.active) { color: var(--gray-700); }
-
-/* Contenido */
-.content {
-  flex: 1;
-  padding: 24px;
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* CARDS */
-/* ══════════════════════════════════════════════════════════════════ */
-.card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 24px;
-  margin-bottom: 20px;
-}
-.card-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.card-title .icon {
-  width: 32px; height: 32px;
-  background: var(--mint-light);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-/* Stats Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-.stat-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  text-align: center;
-  border-left: 4px solid var(--mint);
-}
-.stat-card.warning { border-left-color: var(--warning); }
-.stat-card.danger { border-left-color: var(--danger); }
-.stat-card.info { border-left-color: var(--sky); }
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--gray-800);
-  line-height: 1;
-}
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--gray-500);
-  margin-top: 4px;
-  font-weight: 600;
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* TABLAS */
-/* ══════════════════════════════════════════════════════════════════ */
-.tabla-wrapper { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-thead tr { background: var(--mint-light); }
-th {
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 700;
-  color: var(--gray-700);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 2px solid var(--gray-200);
-}
-td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--gray-100);
-  vertical-align: middle;
-}
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--gray-50); }
-.jugador-nombre { font-weight: 600; }
-
-/* Badges de estado */
-.estado-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.estado-pendiente { background: var(--lemon); color: var(--gray-800); }
-.estado-aprobado { background: var(--mint-light); color: var(--mint-dark); border: 2px solid var(--mint); }
-.estado-rechazado { background: var(--peach-light); color: var(--danger); border: 2px solid var(--peach); }
-.estado-sin-cargar { background: var(--gray-100); color: var(--gray-500); font-style: italic; }
-.estado-habilitado { background: var(--mint-light); color: var(--mint-dark); }
-.estado-inhabilitado { background: var(--peach-light); color: var(--danger); }
-
-/* Tipo cuota badges */
-.tipo-badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  background: var(--lavender-light);
-  color: var(--lavender-dark);
-}
-.tipo-badge.bonif { background: var(--mint-light); color: var(--mint-dark); }
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* BOTONES */
-/* ══════════════════════════════════════════════════════════════════ */
-.btn {
-  padding: 10px 18px;
-  border-radius: var(--radius-sm);
-  border: none;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn-sm { padding: 8px 14px; font-size: 0.8rem; }
-.btn-mint { background: var(--mint); color: var(--gray-800); }
-.btn-mint:hover { background: var(--mint-dark); color: var(--white); }
-.btn-sky { background: var(--sky); color: var(--gray-800); }
-.btn-sky:hover { background: var(--sky-dark); color: var(--white); }
-.btn-peach { background: var(--peach); color: var(--gray-800); }
-.btn-peach:hover { background: var(--peach-dark); color: var(--white); }
-.btn-lavender { background: var(--lavender); color: var(--gray-800); }
-.btn-lavender:hover { background: var(--lavender-dark); color: var(--white); }
-.btn-gray { background: var(--gray-200); color: var(--gray-700); }
-.btn-gray:hover { background: var(--gray-300); }
-.btn-success { background: var(--success); color: var(--white); }
-.btn-danger { background: var(--danger); color: var(--white); }
-
-.btn-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* SELECTOR DE MES */
-/* ══════════════════════════════════════════════════════════════════ */
-.mes-selector {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.mes-selector label {
-  font-weight: 700;
-  color: var(--gray-600);
-}
-.mes-selector select {
-  padding: 10px 16px;
-  border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--gray-800);
-  background: var(--white);
-  cursor: pointer;
-  outline: none;
-}
-.mes-selector select:focus {
-  border-color: var(--mint-dark);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* MODALES */
-/* ══════════════════════════════════════════════════════════════════ */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 24px;
-  backdrop-filter: blur(4px);
-}
-.modal-overlay.active { display: flex; }
-.modal {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 32px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  animation: modalIn 0.2s ease-out;
-}
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-.modal-title {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--gray-800);
-}
-.modal-close {
-  width: 36px; height: 36px;
-  border: none;
-  background: var(--gray-100);
-  border-radius: 50%;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gray-600);
-  transition: all 0.2s;
-}
-.modal-close:hover { background: var(--gray-200); }
-.modal-body { margin-bottom: 24px; }
-.modal-footer { display: flex; gap: 12px; justify-content: flex-end; }
-
-/* Drop Zone */
-.drop-zone {
-  border: 2px dashed var(--gray-300);
-  border-radius: 12px;
-  padding: 32px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--gray-50);
-}
-.drop-zone:hover, .drop-zone.drag-over {
-  border-color: var(--mint);
-  background: rgba(152, 224, 210, 0.1);
-}
-.drop-zone .drop-icon {
-  font-size: 2.5rem;
-  margin-bottom: 12px;
-}
-.drop-zone p {
-  margin: 0;
-  color: var(--gray-600);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* FILTROS */
-/* ══════════════════════════════════════════════════════════════════ */
-.filtros {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.filtro-chip {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 2px solid var(--gray-200);
-  background: var(--white);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gray-600);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.filtro-chip.active {
-  border-color: var(--mint-dark);
-  background: var(--mint-light);
-  color: var(--mint-dark);
-}
-.filtro-chip:hover:not(.active) {
-  border-color: var(--gray-300);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* EMPTY STATE */
-/* ══════════════════════════════════════════════════════════════════ */
-.empty-state {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--gray-500);
-}
-.empty-state .icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-.empty-state h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--gray-700);
-  margin-bottom: 8px;
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* RESPONSIVE */
-/* ══════════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .header { padding: 0 16px; }
-  .content { padding: 16px; }
-  .card { padding: 16px; }
-  .nav-tab { padding: 14px 16px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .stat-number { font-size: 2rem; }
-  .login-card { padding: 32px 24px; }
-  .modal { padding: 24px; margin: 16px; }
-  table { font-size: 0.8rem; }
-  th, td { padding: 10px 12px; }
-  .btn { padding: 8px 14px; font-size: 0.8rem; }
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* TOAST */
-/* ══════════════════════════════════════════════════════════════════ */
-.toast-container {
-  position: fixed;
-  top: 80px;
-  right: 24px;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.toast {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  padding: 16px 20px;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 300px;
-  animation: toastIn 0.3s ease-out;
-  border-left: 4px solid var(--mint-dark);
-}
-.toast.error { border-left-color: var(--danger); }
-.toast.warning { border-left-color: var(--warning); }
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(100%); }
-  to { opacity: 1; transform: translateX(0); }
-}
-.toast-icon { font-size: 1.2rem; }
-.toast-message { flex: 1; font-weight: 600; }
-.toast-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: var(--gray-400);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* LOADING OVERLAY */
-/* ══════════════════════════════════════════════════════════════════ */
-.loading-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 3000;
-}
-.loading-overlay.active { display: flex; }
-.loading-box {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 32px 48px;
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  animation: loadingPulse 0.3s ease-out;
-}
-@keyframes loadingPulse {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-.loading-spinner {
-  width: 48px; height: 48px;
-  border: 4px solid var(--gray-200);
-  border-top-color: var(--mint-dark);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 16px;
-}
-.loading-box p {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--gray-700);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* FOOTER */
-/* ══════════════════════════════════════════════════════════════════ */
-.app-footer {
-  background: var(--white);
-  border-top: 1px solid var(--gray-200);
-  padding: 16px 24px;
-  text-align: center;
-  margin-top: auto;
-}
-.footer-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.footer-credit {
-  font-size: 0.8rem;
-  color: var(--gray-500);
-  font-weight: 500;
-}
-.footer-credit strong {
-  color: var(--gray-700);
-}
-.btn-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: #25D366;
-  color: white;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-.btn-whatsapp:hover {
-  background: #128C7E;
-  transform: scale(1.05);
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* VISOR MOBILE FULLSCREEN (Admin) */
-/* ══════════════════════════════════════════════════════════════════ */
-#visor-mobile-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #000;
-  flex-direction: column;
-}
-#visor-mobile-overlay.active { display: flex; }
-
-#visor-mobile-header {
-  background: rgba(0,0,0,0.85);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #fff;
-  flex-shrink: 0;
-}
-#visor-mobile-header .visor-info {
-  font-size: 0.82rem;
-  line-height: 1.4;
-}
-#visor-mobile-header .visor-info strong {
-  display: block;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-#visor-mobile-header .visor-estado {
-  font-size: 0.72rem;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-}
-
-#visor-mobile-content {
-  flex: 1;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: pan-x pan-y pinch-zoom;
-  -webkit-overflow-scrolling: touch;
-}
-
-#visor-mobile-content img {
-  max-width: none;
-  max-height: none;
-  transform-origin: center center;
-  transition: transform 0.1s ease-out;
-}
-
-#visor-mobile-content embed {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-}
-
-#visor-mobile-actions {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.9);
-  padding: 12px 16px;
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.visor-btn {
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: transform 0.15s, opacity 0.15s;
-}
-.visor-btn:active { transform: scale(0.95); opacity: 0.9; }
-
-.visor-btn-volver { background: #475569; color: #fff; }
-.visor-btn-aprobar { background: #16a34a; color: #fff; }
-.visor-btn-rechazar { background: #dc2626; color: #fff; }
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* RESUMEN POR EQUIPO — BADGES */
-/* ══════════════════════════════════════════════════════════════════ */
-.equipo-badge-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-.equipo-badge {
-  padding: 20px 16px;
-  border-radius: 12px;
-  text-align: center;
-  transition: transform 0.2s;
-}
-.equipo-badge:hover {
-  transform: translateY(-2px);
-}
-.equipo-badge.bajo { 
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
-  border: 2px solid #fca5a5; 
-}
-.equipo-badge.medio { 
-  background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%); 
-  border: 2px solid #facc15; 
-}
-.equipo-badge.ok { 
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); 
-  border: 2px solid #86efac; 
-}
-.equipo-badge .badge-nombre {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin-bottom: 8px;
-}
-.equipo-badge .badge-pct {
-  font-size: 2.2rem;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-.equipo-badge.bajo .badge-pct { color: #dc2626; }
-.equipo-badge.medio .badge-pct { color: #ca8a04; }
-.equipo-badge.ok .badge-pct { color: #16a34a; }
-.equipo-badge .badge-detalle {
-  font-size: 0.8rem;
-  color: var(--gray-500);
-  font-weight: 600;
-}
-
-/* Cards de comprobantes (mobile view) */
-.comprobante-card-mobile {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  border: 1px solid var(--gray-100);
-}
-.comprobante-card-mobile .card-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-.comprobante-card-mobile .card-info {
-  flex: 1;
-  min-width: 0;
-}
-.comprobante-card-mobile .card-nombre {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--gray-800);
-}
-.comprobante-card-mobile .card-meta {
-  font-size: 0.85rem;
-  color: var(--gray-500);
-  margin-top: 2px;
-}
-.comprobante-card-mobile .card-fecha {
-  font-size: 0.78rem;
-  color: var(--gray-400);
-  margin-top: 4px;
-}
-.comprobante-card-mobile .card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-/* ══════════════════════════════════════════════════════════════════ */
-/* MEJORAS MOBILE */
-/* ══════════════════════════════════════════════════════════════════ */
-@media (max-width: 640px) {
-  html { font-size: 16px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDP - Ficha de Salud</title>
   
-  /* Evitar scroll horizontal en contenido, pero permitir en tabs */
-  body, .content, .card { 
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
+  <!-- Favicon hospital/medical SVG en base64 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjY0IiBmaWxsPSIjMjg1NUE0Ii8+PHBhdGggZD0iTTM1MiAxNzZoLTY0di02NGMwLTE3LjctMTQuMy0zMi0zMi0zMmgtMzJjLTE3LjcgMC0zMiAxNC4zLTMyIDMydjY0aC02NGMtMTcuNyAwLTMyIDE0LjMtMzIgMzJ2MzJjMCAxNy43IDE0LjMgMzIgMzIgMzJoNjR2NjRjMCAxNy43IDE0LjMgMzIgMzIgMzJoMzJjMTcuNyAwIDMyLTE0LjMgMzItMzJ2LTY0aDY0YzE3LjcgMCAzMi0xNC4zIDMyLTMydi0zMmMwLTE3LjctMTQuMy0zMi0zMi0zMnoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=">
   
-  .header h1 { font-size: 1.2rem; }
-  .header .emoji { font-size: 1.5rem; }
-  .admin-badge { font-size: 0.75rem; padding: 4px 10px; }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
   
-  /* Tabs en una línea scrolleable */
-  .nav-tabs { 
-    padding: 0 12px;
-    gap: 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  .nav-tab { 
-    padding: 12px 14px; 
-    font-size: 0.8rem;
-  }
-  
-  .card { 
-    padding: 14px; 
-    border-radius: 12px;
-    margin-bottom: 12px;
-  }
-  
-  .stats-grid { 
-    grid-template-columns: 1fr 1fr; 
-    gap: 10px;
-  }
-  .stat-card { padding: 14px; }
-  .stat-number { font-size: 1.8rem; }
-  .stat-label { font-size: 0.8rem; }
-  
-  .jugador-card {
-    padding: 14px;
-  }
-  .jugador-nombre { font-size: 1rem; }
-  .jugador-meta { font-size: 0.85rem; }
-  
-  /* Ocultar tablas en mobile, usar cards */
-  .tabla-desktop { display: none !important; }
-  .cards-mobile { display: block !important; }
-  
-  .btn { 
-    padding: 10px 14px; 
-    font-size: 0.9rem;
-    border-radius: 8px;
-  }
-  .btn-sm { padding: 8px 10px; font-size: 0.8rem; }
-  
-  .modal { 
-    padding: 20px; 
-    margin: 12px;
-    border-radius: 16px;
-  }
-  .modal-title { font-size: 1.3rem; }
-  
-  .toast { 
-    min-width: auto; 
-    margin: 0 12px;
-    padding: 14px 18px;
-    font-size: 0.95rem;
-  }
-  .toast-container { 
-    right: 0; 
-    left: 0;
-    top: 70px;
-  }
-  
-  .filtros { gap: 8px; }
-  .filtro-chip { 
-    padding: 8px 14px; 
-    font-size: 0.9rem;
-    border-radius: 16px;
-  }
-  
-  .mes-selector select {
-    padding: 10px 14px;
-    font-size: 0.95rem;
-  }
-  
-  /* Config - grids en mobile */
-  #tab-config .card div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-  
-  .login-card {
-    padding: 32px 24px;
-    border-radius: 20px;
-  }
-  .login-card h1 { font-size: 1.8rem; }
-  .login-card .subtitle { font-size: 1rem; }
-  
-  .footer-content { gap: 12px; }
-  .footer-credit { font-size: 0.85rem; }
-  .btn-whatsapp { padding: 8px 16px; font-size: 0.85rem; }
-  
-  /* Cards de comprobantes en mobile */
-  .comprobante-card-mobile {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border: 1px solid var(--gray-100);
-  }
-  .comprobante-card-mobile .card-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .comprobante-card-mobile .card-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .comprobante-card-mobile .card-nombre {
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--gray-800);
-    word-break: break-word;
-  }
-  .comprobante-card-mobile .card-meta {
-    font-size: 0.85rem;
-    color: var(--gray-500);
-    margin-top: 2px;
-  }
-  .comprobante-card-mobile .card-fecha {
-    font-size: 0.75rem;
-    color: var(--gray-400);
-    margin-top: 4px;
-  }
-  .comprobante-card-mobile .card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-    flex-wrap: wrap;
-  }
-  
-  /* Resumen por equipo badges - mobile */
-  .equipo-badge-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .equipo-badge {
-    padding: 14px 10px;
-  }
-  .equipo-badge .badge-nombre {
-    font-size: 0.85rem;
-  }
-  .equipo-badge .badge-pct {
-    font-size: 1.8rem;
-  }
-  .equipo-badge .badge-detalle {
-    font-size: 0.75rem;
-  }
-}
-
-/* Desktop: mostrar tablas, ocultar cards mobile */
-@media (min-width: 641px) {
-  .tabla-desktop { display: block !important; }
-  .cards-mobile { display: none !important; }
-}
-
-/* Ocultar por defecto */
-.cards-mobile { display: none; }
-</style>
+  <style>
+    :root {
+      --cdp-azul: #2855A4;
+      --cdp-azul-dark: #1e4080;
+      --cdp-verde: #2E8B4A;
+      --cdp-verde-dark: #246b3a;
+      --bg-light: #f5f7fa;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --border: #e5e7eb;
+      --shadow: 0 4px 20px rgba(40, 85, 164, 0.12);
+      --shadow-lg: 0 8px 30px rgba(40, 85, 164, 0.18);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: linear-gradient(135deg, var(--cdp-azul) 0%, var(--cdp-azul-dark) 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-dark);
+    }
+    
+    .container { max-width: 480px; margin: 0 auto; }
+    .container.admin-mode { max-width: 800px; }
+    
+    .header { text-align: center; padding: 30px 20px; color: var(--white); }
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .header p { font-size: 1rem; opacity: 0.9; }
+    
+    .admin-link {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .admin-link:hover { color: rgba(255,255,255,0.9); }
+    
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+    
+    .steps { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
+    .step-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .step-dot.active { background: var(--cdp-azul); transform: scale(1.2); }
+    .step-dot.completed { background: var(--cdp-verde); }
+    
+    .step-content { display: none; animation: fadeIn 0.3s ease; }
+    .step-content.active { display: block; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .step-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--cdp-azul);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .form-group label .required { color: var(--error); margin-left: 2px; }
+    
+    select, input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+    
+    textarea { resize: vertical; min-height: 80px; }
+    
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--cdp-azul);
+      box-shadow: 0 0 0 3px rgba(40, 85, 164, 0.15);
+    }
+    
+    select:disabled, input:disabled {
+      background: var(--bg-light);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px 24px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-primary { background: var(--cdp-azul); color: var(--white); }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--cdp-azul-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-success { background: var(--cdp-verde); color: var(--white); }
+    .btn-success:hover:not(:disabled) {
+      background: var(--cdp-verde-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    
+    .btn-back {
+      background: transparent;
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .btn-back:hover { background: var(--bg-light); border-color: var(--text-muted); }
+    
+    .btn-whatsapp {
+      background: #25D366;
+      color: var(--white);
+      width: auto;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+    .btn-whatsapp:hover { background: #1fb855; }
+    
+    .btn-sm { padding: 10px 16px; font-size: 0.875rem; }
+    
+    .message {
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .message.show { display: block; animation: fadeIn 0.3s ease; }
+    .message.error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error); }
+    .message.success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+    
+    .player-info {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--cdp-verde);
+    }
+    .player-info .name { font-weight: 700; font-size: 1.1rem; color: var(--text-dark); }
+    .player-info .team { font-size: 0.875rem; color: var(--text-muted); margin-top: 4px; }
+    
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .success-screen { text-align: center; padding: 20px 0; }
+    .success-icon {
+      width: 80px; height: 80px;
+      background: var(--success-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .success-icon svg { width: 40px; height: 40px; color: var(--success); }
+    .success-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--cdp-verde);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .success-screen p { color: var(--text-muted); margin-bottom: 24px; }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+    }
+    
+    /* ADMIN STYLES */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--cdp-azul);
+      letter-spacing: 1px;
+    }
+    
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--cdp-azul);
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card .stat-pct {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--success);
+      margin-top: 4px;
+    }
+    .stat-card.success .number { color: var(--success); }
+    .stat-card.warning .number { color: var(--warning); }
+    
+    .equipo-card {
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--border);
+    }
+    .equipo-card.completo { border-left-color: var(--success); }
+    .equipo-card.parcial { border-left-color: var(--warning); }
+    .equipo-card.vacio { border-left-color: var(--error); }
+    
+    .equipo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .equipo-nombre { font-weight: 700; font-size: 1rem; }
+    .equipo-delegado { font-size: 0.8rem; color: var(--text-muted); }
+    .equipo-contador { font-size: 0.875rem; color: var(--text-muted); }
+    .equipo-contador strong { color: var(--cdp-verde); }
+    
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      background: var(--cdp-verde);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .faltantes-list {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .faltantes-list.show { display: block; }
+    .faltantes-list h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .faltantes-list ul {
+      list-style: none;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+    .faltantes-list li {
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .faltantes-list li:last-child { border-bottom: none; }
+    
+    .equipo-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    
+    .btn-toggle {
+      background: transparent;
+      color: var(--cdp-azul);
+      border: 1px solid var(--cdp-azul);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      width: auto;
+    }
+    .btn-toggle:hover { background: var(--cdp-azul); color: var(--white); }
+    
+    .section-divider {
+      text-align: center;
+      margin: 24px 0 16px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: var(--cdp-azul);
+      letter-spacing: 1px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '—';
+      margin: 0 10px;
+      opacity: 0.3;
+    }
+    .section-divider .cat-pct {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cdp-verde);
+    }
+    
+    @media (max-width: 400px) {
+      body { padding: 12px; }
+      .card { padding: 20px 16px; }
+      .header h1 { font-size: 2rem; }
+      .admin-stats { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!-- SPLASH -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<div id="splash-screen">
-  <div class="spinner"></div>
-  <p>Cargando Hockey CDP...</p>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!-- LOGIN -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">🏑</div>
-    <h1>Pagos Hockey CDP</h1>
-    <p class="subtitle">Club de Profesionales • Gestión de Cuotas</p>
+  <div class="container" id="mainContainer">
+    <a class="admin-link" id="adminLink">⚙️ Admin</a>
     
-    <div class="login-tabs">
-      <button class="login-tab active" onclick="setLoginMode('delegado')">Delegado</button>
-      <button class="login-tab" onclick="setLoginMode('admin')">Admin</button>
-    </div>
+    <header class="header">
+      <h1>Club de Profesionales</h1>
+      <p id="headerSubtitle">Ficha de Salud - Temporada 2026</p>
+    </header>
     
-    <form id="login-form" onsubmit="return handleLogin(event)">
-      <div id="equipo-group" class="form-group">
-        <label>Equipo</label>
-        <select id="login-equipo">
-          <option value="">Seleccionar equipo...</option>
-        </select>
+    <!-- FORMULARIO JUGADORES -->
+    <main class="card" id="playerForm">
+      <div class="steps">
+        <div class="step-dot active" data-step="1"></div>
+        <div class="step-dot" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+        <div class="step-dot" data-step="4"></div>
       </div>
       
-      <div class="form-group">
-        <label>PIN</label>
-        <input type="password" id="login-pin" class="pin-input" maxlength="6" placeholder="••••" required>
-      </div>
+      <div id="message" class="message"></div>
       
-      <button type="submit" class="btn-primary" id="btn-login">Ingresar</button>
-      
-      <div id="login-error" class="login-error"></div>
-    </form>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!-- APP -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<div id="app">
-  <header class="header">
-    <div class="header-left">
-      <div class="header-logo">🏑</div>
-      <div class="header-info">
-        <h1>Hockey CDP</h1>
-        <span id="header-equipo"></span>
-      </div>
-    </div>
-    <div class="header-right">
-      <span id="badge-rol" class="badge-role badge-delegado">Delegado</span>
-      <button class="btn-logout" onclick="logout()">Salir</button>
-    </div>
-  </header>
-  
-  <!-- NAV DELEGADO -->
-  <nav id="nav-delegado" class="nav-tabs">
-    <button class="nav-tab active" onclick="showTab('tab-pagos')">💳 Carga de Comprobantes</button>
-    <button class="nav-tab" onclick="showTab('tab-habilitaciones')">✅ Habilitaciones</button>
-    <button class="nav-tab" onclick="showTab('tab-gestion')">👥 Gestión de Jugadores</button>
-  </nav>
-  
-  <!-- NAV ADMIN -->
-  <nav id="nav-admin" class="nav-tabs" style="display:none;">
-    <button class="nav-tab active" onclick="showTab('tab-resumen')">📊 Resumen</button>
-    <button class="nav-tab" onclick="showTab('tab-estadisticas')">📈 Estadísticas</button>
-    <button class="nav-tab" onclick="showTab('tab-comprobantes')">💳 Comprobantes</button>
-    <button class="nav-tab" onclick="showTab('tab-jugadores')">👥 Jugadores</button>
-    <button class="nav-tab" onclick="showTab('tab-solicitudes')">📋 Solicitudes</button>
-    <button class="nav-tab" onclick="showTab('tab-config')">⚙️ Config</button>
-  </nav>
-  
-  <main class="content">
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: PAGOS (Delegado) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-pagos" class="tab-content">
-      <div class="mes-selector">
-        <label>Mes:</label>
-        <select id="select-mes" onchange="cargarPagosUI()"></select>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">💳</span>
-          Carga de Comprobantes — <span id="contador-pagos" style="font-weight:400;color:var(--gray-500);"></span>
-        </div>
-        <div class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Jugador/a</th>
-                <th>Tipo Cuota</th>
-                <th>Estado</th>
-                <th>Comprobante</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-pagos"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: HABILITACIONES (Delegado) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-habilitaciones" class="tab-content">
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">✅</span>
-          Habilitaciones del Plantel
-        </div>
-        <p style="color:var(--gray-500);margin-bottom:16px;">Mes actual: <strong id="mes-actual-hab"></strong></p>
-        <div class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Jugador/a</th>
-                <th>Tipo Cuota</th>
-                <th>Estado</th>
-                <th>Meses Pagados</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-habilitaciones"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: GESTIÓN DE JUGADORES (Delegado) - Altas y Bajas -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-gestion" class="tab-content">
-      <!-- SOLICITAR ALTA -->
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">➕</span>
-          Solicitar Alta de Jugador/a
-        </div>
-        <form id="form-alta" onsubmit="return solicitarAlta(event)">
-          <div class="form-group">
-            <label>Nombre Completo</label>
-            <input type="text" id="alta-nombre" placeholder="APELLIDO NOMBRE" required>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div class="form-group">
-              <label>DNI</label>
-              <input type="text" id="alta-dni" placeholder="12345678">
-            </div>
-            <div class="form-group">
-              <label>Fecha Nacimiento</label>
-              <input type="date" id="alta-fechanac">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Tipo de Cuota</label>
-            <select id="alta-tipocuota">
-              <option value="NORMAL">Normal</option>
-              <option value="DEPORTIVA (VIVE FUERA CDU)">Deportiva (Vive fuera CDU)</option>
-              <option value="SOCIAL (VIVE FUERA CDU)">Social (Vive fuera CDU)</option>
-              <option value="BECA">Beca</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-mint" style="width:100%;">Enviar Solicitud de Alta</button>
-        </form>
-      </div>
-      
-      <!-- SOLICITAR BAJA -->
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">➖</span>
-          Solicitar Baja de Jugador/a
-        </div>
-        <form id="form-baja" onsubmit="return solicitarBaja(event)">
-          <div class="form-group">
-            <label>Seleccionar Jugador/a</label>
-            <select id="baja-jugador" required>
-              <option value="">Seleccionar...</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Motivo de la Baja</label>
-            <textarea id="baja-motivo" rows="2" style="width:100%;padding:12px;border:2px solid var(--gray-200);border-radius:var(--radius-sm);font-family:inherit;font-size:0.95rem;resize:vertical;" placeholder="Ej: Se muda, deja de jugar, etc."></textarea>
-          </div>
-          <button type="submit" class="btn btn-peach" style="width:100%;">Enviar Solicitud de Baja</button>
-        </form>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: RESUMEN (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-resumen" class="tab-content">
-      <div class="stats-grid">
-        <div class="stat-card warning">
-          <div class="stat-number" id="stat-pendientes">0</div>
-          <div class="stat-label">Pendientes</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="stat-aprobados">0</div>
-          <div class="stat-label">Aprobados</div>
-        </div>
-        <div class="stat-card danger">
-          <div class="stat-number" id="stat-rechazados">0</div>
-          <div class="stat-label">Rechazados</div>
-        </div>
-        <div class="stat-card info">
-          <div class="stat-number" id="stat-solicitudes">0</div>
-          <div class="stat-label">Solicitudes</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">⚽</span>
-          Estado de Pagos por Equipo
-        </div>
-        <div id="resumen-equipos-container"></div>
-      </div>
-      
-      <div class="card" id="card-rechazos-mes" style="display:none;">
-        <div class="card-title" style="color:var(--danger);">
-          <span class="icon">❌</span>
-          Rechazos del mes
-        </div>
-        <div id="lista-rechazos-mes"></div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: ESTADÍSTICAS (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-estadisticas" class="tab-content">
-      <div class="mes-selector">
-        <label>Filtrar por Mes:</label>
-        <select id="select-mes-stats" onchange="cargarEstadisticas()">
-          <option value="">Todos los meses</option>
-        </select>
-      </div>
-      
-      <div class="stats-grid">
-        <div class="stat-card" style="grid-column: span 2;">
-          <div class="stat-number" id="stat-recaudacion">$0</div>
-          <div class="stat-label">Recaudación Total</div>
-        </div>
-        <div class="stat-card info">
-          <div class="stat-number" id="stat-jugadores">0</div>
-          <div class="stat-label">Total Jugadores</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">📊</span>
-          Pagos por Equipo
-        </div>
-        <div id="stats-por-equipo"></div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: COMPROBANTES (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-comprobantes" class="tab-content">
-      <div class="filtros">
-        <button class="filtro-chip active" onclick="filtrarComprobantes('todos', this)">Todos</button>
-        <button class="filtro-chip" onclick="filtrarComprobantes('Pendiente', this)">Pendientes</button>
-        <button class="filtro-chip" onclick="filtrarComprobantes('Aprobado', this)">Aprobados</button>
-        <button class="filtro-chip" onclick="filtrarComprobantes('Rechazado', this)">Rechazados</button>
-      </div>
-      
-      <div class="card">
-        <div id="comprobantes-container"></div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: JUGADORES (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-jugadores" class="tab-content">
-      <div class="mes-selector">
-        <label>Equipo:</label>
-        <select id="filtro-equipo-jugadores" onchange="cargarJugadoresAdmin()">
-          <option value="">Todos los equipos</option>
-        </select>
-        <button class="btn btn-lavender" onclick="abrirModalAltaAdmin()">➕ Agregar Jugador</button>
-      </div>
-      
-      <div class="card">
-        <div class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Equipo</th>
-                <th>DNI</th>
-                <th>Tipo Cuota</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-jugadores-admin"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: SOLICITUDES (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-solicitudes" class="tab-content">
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">📋</span>
-          Solicitudes de Alta
-        </div>
-        <div class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Equipo</th>
-                <th>DNI</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-solicitudes-admin"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB: CONFIG (Admin) -->
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <div id="tab-config" class="tab-content">
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">💰</span>
-          Cuota Social (igual para todos)
-        </div>
+      <!-- Step 1 -->
+      <div id="step1" class="step-content active">
+        <h2 class="step-title">1. Seleccioná tu Equipo</h2>
         <div class="form-group">
-          <label>Cuota Social</label>
-          <input type="number" id="config-social" placeholder="16000">
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">🏑</span>
-          Superior (Damas / Caballeros / Master)
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="form-group">
-            <label>Deportiva</label>
-            <input type="number" id="config-deportiva-superior" placeholder="20000">
-          </div>
-          <div class="form-group">
-            <label>Completa</label>
-            <input type="number" id="config-completa-superior" placeholder="36000">
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">👶</span>
-          Infantiles
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-          <div class="form-group">
-            <label>Deportiva</label>
-            <input type="number" id="config-deportiva-infantiles" placeholder="15000">
-          </div>
-          <div class="form-group">
-            <label>Completa</label>
-            <input type="number" id="config-completa-infantiles" placeholder="31000">
-          </div>
-          <div class="form-group">
-            <label>Hijo de Socio</label>
-            <input type="number" id="config-hijo-infantiles" placeholder="15000">
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">🧒</span>
-          Sub 8 / Sub 12
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-          <div class="form-group">
-            <label>Deportiva</label>
-            <input type="number" id="config-deportiva-sub8-12" placeholder="10000">
-          </div>
-          <div class="form-group">
-            <label>Completa</label>
-            <input type="number" id="config-completa-sub8-12" placeholder="26000">
-          </div>
-          <div class="form-group">
-            <label>Hijo de Socio</label>
-            <input type="number" id="config-hijo-sub8-12" placeholder="10000">
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">🏃</span>
-          Sub 14 / Sub 16
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-          <div class="form-group">
-            <label>Deportiva</label>
-            <input type="number" id="config-deportiva-sub14-16" placeholder="14000">
-          </div>
-          <div class="form-group">
-            <label>Completa</label>
-            <input type="number" id="config-completa-sub14-16" placeholder="30000">
-          </div>
-          <div class="form-group">
-            <label>Hijo de Socio</label>
-            <input type="number" id="config-hijo-sub14-16" placeholder="14000">
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <span class="icon">🎁</span>
-          Bonificado / Becado
-        </div>
-        <div class="form-group">
-          <label>Cuota Bonificado</label>
-          <input type="number" id="config-bonificado" placeholder="0">
-        </div>
-      </div>
-      
-      <button class="btn btn-mint" onclick="guardarConfig()" style="width:100%;margin-top:8px;">
-        💾 Guardar Configuración
-      </button>
-    </div>
-  </main>
-  
-  <!-- Footer -->
-  <footer class="app-footer">
-    <div class="footer-content">
-      <span class="footer-credit">Diseñado por</span>
-      <a href="https://wa.me/5491161630873" target="_blank" class="btn-whatsapp">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        GR10
-      </a>
-    </div>
-  </footer>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!-- MODALES -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
-
-<!-- Modal Cargar Comprobante Individual -->
-<div id="modal-cargar" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title">Cargar Comprobante</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-cargar')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p style="margin-bottom:8px;color:var(--gray-600);">Jugador/a:</p>
-      <p style="font-size:1.2rem;font-weight:700;margin-bottom:16px;" id="cargar-nombre-jugador"></p>
-      <p style="margin-bottom:16px;color:var(--gray-500);">Mes: <strong id="cargar-mes-display"></strong></p>
-      
-      <!-- Zona de carga de archivo -->
-      <div id="drop-zone" class="drop-zone" onclick="document.getElementById('file-input').click()">
-        <div id="drop-zone-content">
-          <div class="drop-icon">📎</div>
-          <p><strong>Tocá para elegir</strong> o arrastrá aquí</p>
-          <p style="font-size:0.8rem;color:var(--gray-400);margin-top:8px;">JPG, PNG o PDF (máx 10MB)</p>
-        </div>
-        <div id="preview-container" style="display:none;">
-          <img id="preview-img" style="max-width:100%;max-height:200px;border-radius:8px;">
-          <div id="preview-pdf" style="display:none;text-align:center;">
-            <div style="font-size:3rem;">📄</div>
-            <p id="preview-pdf-name" style="font-weight:600;"></p>
-          </div>
-          <button type="button" class="btn btn-sm btn-gray" style="margin-top:12px;" onclick="event.stopPropagation();limpiarArchivo()">Cambiar archivo</button>
-        </div>
-      </div>
-      <input type="file" id="file-input" accept="image/*,.pdf" style="display:none;" onchange="handleFileSelect(event)">
-      
-      <input type="hidden" id="cargar-jugador-id">
-      <input type="hidden" id="cargar-mes">
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-gray" onclick="cerrarModal('modal-cargar')">Cancelar</button>
-      <button class="btn btn-mint" onclick="enviarComprobante()" id="btn-enviar-comprobante">Cargar Comprobante</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Rechazar -->
-<div id="modal-rechazar" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title">Rechazar Comprobante</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-rechazar')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <span style="color:var(--gray-500);font-size:0.8rem;">Jugador</span>
-          <span id="rech-jugador" style="font-weight:700;color:var(--gray-800);">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <span style="color:var(--gray-500);font-size:0.8rem;">Mes</span>
-          <span id="rech-mes" style="font-weight:600;color:var(--gray-700);">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;">
-          <span style="color:var(--gray-500);font-size:0.8rem;">Equipo</span>
-          <span id="rech-equipo" style="font-weight:600;color:var(--gray-700);">—</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label style="font-weight:700;color:var(--gray-700);">Motivo del Rechazo *</label>
-        <textarea id="rechazar-obs" rows="4" style="width:100%;padding:12px;border:2px solid var(--gray-200);border-radius:var(--radius-sm);font-family:inherit;font-size:0.95rem;resize:vertical;" placeholder="Indicá por qué se rechaza el comprobante..."></textarea>
-      </div>
-      <input type="hidden" id="rechazar-id">
-      <input type="hidden" id="rechazar-jugador-nombre">
-      <input type="hidden" id="rechazar-equipo-id">
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-gray" onclick="cerrarModal('modal-rechazar')">Cancelar</button>
-      <button class="btn btn-danger" onclick="confirmarRechazo()" id="btn-confirmar-rechazo">Rechazar</button>
-    </div>
-  </div>
-</div>
-
-<!-- VISOR MOBILE FULLSCREEN (Admin) -->
-<div id="visor-mobile-overlay">
-  <div id="visor-mobile-header">
-    <div class="visor-info">
-      <strong id="visor-jugador">—</strong>
-      <span id="visor-equipo-mes">—</span>
-    </div>
-    <span id="visor-estado" class="visor-estado">—</span>
-  </div>
-  <div id="visor-mobile-content">
-    <div id="visor-loading" style="color:#fff;font-size:0.9rem">Cargando...</div>
-  </div>
-  <div id="visor-mobile-actions">
-    <button class="visor-btn visor-btn-volver" onclick="cerrarVisorMobile()">← Volver</button>
-    <button class="visor-btn visor-btn-aprobar" id="visor-btn-aprobar" style="display:none" onclick="visorAprobar()">✓ Aprobar</button>
-    <button class="visor-btn visor-btn-rechazar" id="visor-btn-rechazar" style="display:none" onclick="visorRechazar()">✕ Rechazar</button>
-  </div>
-</div>
-
-<!-- Modal Alta Admin -->
-<div id="modal-alta-admin" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title">Agregar Jugador</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-alta-admin')">✕</button>
-    </div>
-    <div class="modal-body">
-      <form id="form-alta-admin" onsubmit="return altaJugadorAdmin(event)">
-        <div class="form-group">
-          <label>Equipo</label>
-          <select id="alta-admin-equipo" required></select>
-        </div>
-        <div class="form-group">
-          <label>Nombre Completo</label>
-          <input type="text" id="alta-admin-nombre" placeholder="APELLIDO NOMBRE" required>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div class="form-group">
-            <label>DNI</label>
-            <input type="text" id="alta-admin-dni" placeholder="12345678">
-          </div>
-          <div class="form-group">
-            <label>Fecha Nacimiento</label>
-            <input type="date" id="alta-admin-fechanac">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Tipo de Cuota</label>
-          <select id="alta-admin-tipocuota">
-            <option value="NORMAL">Normal</option>
-            <option value="DEPORTIVA (VIVE FUERA CDU)">Deportiva (Vive fuera CDU)</option>
-            <option value="SOCIAL (VIVE FUERA CDU)">Social (Vive fuera CDU)</option>
-            <option value="BECA">Beca</option>
-            <option value="DT (BONIF)">DT (Bonificado)</option>
-            <option value="DELEGADO (BONIF)">Delegado (Bonificado)</option>
-            <option value="MONITOR (BONIF)">Monitor (Bonificado)</option>
-            <option value="AYUD TEC (BONIF)">Ayudante Técnico (Bonificado)</option>
+          <label for="equipoSelect">Equipo <span class="required">*</span></label>
+          <select id="equipoSelect" disabled>
+            <option value="">Cargando equipos...</option>
           </select>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-gray" onclick="cerrarModal('modal-alta-admin')">Cancelar</button>
-      <button class="btn btn-lavender" onclick="document.getElementById('form-alta-admin').requestSubmit()">Agregar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
-
-<!-- Loading Overlay -->
-<div id="loading-overlay" class="loading-overlay">
-  <div class="loading-box">
-    <div class="loading-spinner"></div>
-    <p id="loading-text">Cargando...</p>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!-- JAVASCRIPT -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzlov6C4W3E3WlqYwCLSYjLoSwH_JbiZn4M1mxN4aemSItI7q3Vf5kIgmvSbthB0bHNtQ/exec';
-
-let STATE = {
-  token: null,
-  rol: null,
-  equipo: null,
-  nombreAdmin: null,
-  equipos: [],
-  jugadores: [],
-  meses: [],
-  pagos: [],
-  filtroComprobantes: 'todos',
-  // Cache timestamps
-  cache: {
-    jugadores: 0,
-    pagos: 0,
-    equipos: 0
-  }
-};
-
-const CACHE_TTL = 60000; // 1 minuto de cache
-
-function isCacheValid(key) {
-  return STATE.cache[key] && (Date.now() - STATE.cache[key] < CACHE_TTL);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', init);
-
-async function init() {
-  // Recuperar sesión
-  STATE.token = localStorage.getItem('hockey_token');
-  STATE.rol = localStorage.getItem('hockey_rol');
-  STATE.equipo = JSON.parse(localStorage.getItem('hockey_equipo') || 'null');
-  STATE.nombreAdmin = localStorage.getItem('hockey_nombreAdmin') || 'Admin';
-  
-  showLoading('Conectando...');
-  
-  try {
-    // Una sola llamada inicial que trae equipos y meses
-    const res = await api('getInicio');
-    hideLoading();
-    
-    if (res.ok) {
-      STATE.equipos = res.equipos || [];
-      STATE.meses = res.meses || ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        <button id="btnStep1" class="btn btn-primary" disabled>Continuar</button>
+      </div>
       
-      // Llenar select de equipos
-      const select = document.getElementById('login-equipo');
-      select.innerHTML = '<option value="">Seleccionar equipo...</option>';
-      STATE.equipos.forEach(eq => {
-        select.innerHTML += `<option value="${eq.id}">${eq.nombre}</option>`;
+      <!-- Step 2 -->
+      <div id="step2" class="step-content">
+        <h2 class="step-title">2. Seleccioná tu Nombre</h2>
+        <div class="form-group">
+          <label for="jugadorSelect">Jugador <span class="required">*</span></label>
+          <select id="jugadorSelect" disabled>
+            <option value="">Seleccioná un jugador...</option>
+          </select>
+        </div>
+        <button id="btnBack2" class="btn btn-back">← Volver</button>
+        <button id="btnStep2" class="btn btn-primary" disabled>Continuar</button>
+      </div>
+      
+      <!-- Step 3 -->
+      <div id="step3" class="step-content">
+        <h2 class="step-title">3. Ingresá tu DNI</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+          Tu DNI es tu clave personal para acceder a tus datos.
+        </p>
+        <div class="form-group">
+          <label for="dniInput">DNI (sin puntos) <span class="required">*</span></label>
+          <input type="text" id="dniInput" placeholder="Ej: 28008903" inputmode="numeric" pattern="[0-9]*" maxlength="10">
+        </div>
+        <button id="btnBack3" class="btn btn-back">← Volver</button>
+        <button id="btnStep3" class="btn btn-primary">Validar DNI</button>
+      </div>
+      
+      <!-- Step 4 -->
+      <div id="step4" class="step-content">
+        <h2 class="step-title">4. Datos de Salud</h2>
+        
+        <div id="playerInfoDisplay" class="player-info" style="display: none;">
+          <div class="name" id="displayNombre"></div>
+          <div class="team" id="displayEquipo"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="grupoSanguineo">Grupo Sanguíneo <span class="required">*</span></label>
+          <select id="grupoSanguineo">
+            <option value="">Seleccioná...</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="No sé">No sé</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="condicionesMedicas">Condiciones Médicas <span class="required">*</span></label>
+          <textarea id="condicionesMedicas" placeholder="Ej: Asma, diabetes, alergias...">Ninguna</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="medicacion">Medicación Habitual <span class="required">*</span></label>
+          <textarea id="medicacion" placeholder="Ej: Ventolin, Metformina...">Ninguna</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="contactoNombre">Contacto de Emergencia - Nombre <span class="required">*</span></label>
+          <input type="text" id="contactoNombre" placeholder="Nombre y apellido">
+        </div>
+        
+        <div class="form-group">
+          <label for="contactoTel">Contacto de Emergencia - Teléfono <span class="required">*</span></label>
+          <input type="tel" id="contactoTel" placeholder="Ej: 3442123456" inputmode="tel">
+        </div>
+        
+        <div class="form-group">
+          <label for="obraSocial">Obra Social / Prepaga <span class="required">*</span></label>
+          <input type="text" id="obraSocial" placeholder="Ej: OSDE 310, SANCOR 3000">
+        </div>
+        
+        <button id="btnBack4" class="btn btn-back">← Volver al inicio</button>
+        <button id="btnGuardar" class="btn btn-success">Guardar Datos</button>
+      </div>
+      
+      <!-- Success -->
+      <div id="stepSuccess" class="step-content">
+        <div class="success-screen">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2>¡Datos Guardados!</h2>
+          <p>Tu ficha de salud fue actualizada correctamente.</p>
+          <button id="btnNuevo" class="btn btn-primary">Cargar otro jugador</button>
+        </div>
+      </div>
+    </main>
+    
+    <!-- PANEL ADMIN -->
+    <div class="card admin-panel" id="adminPanel">
+      <!-- Admin Login -->
+      <div id="adminLogin" class="step-content active">
+        <h2 class="step-title">Acceso Administrador</h2>
+        <div id="adminMessage" class="message"></div>
+        <div class="form-group">
+          <label for="adminClave">Clave <span class="required">*</span></label>
+          <input type="password" id="adminClave" placeholder="Ingresá la clave" inputmode="numeric">
+        </div>
+        <button id="btnAdminLogin" class="btn btn-primary">Ingresar</button>
+        <button id="btnAdminBack" class="btn btn-back" style="margin-top: 10px;">← Volver al formulario</button>
+      </div>
+      
+      <!-- Admin Dashboard -->
+      <div id="adminDashboard" class="step-content">
+        <div class="admin-header">
+          <h2>Estado de Fichas</h2>
+          <button id="btnRefresh" class="btn btn-primary btn-sm" style="width: auto;">🔄 Actualizar</button>
+        </div>
+        
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="number" id="statTotal">-</div>
+            <div class="label">Total</div>
+          </div>
+          <div class="stat-card success">
+            <div class="number" id="statCompletados">-</div>
+            <div class="label">Completados</div>
+            <div class="stat-pct" id="statPctTotal">-</div>
+          </div>
+          <div class="stat-card warning">
+            <div class="number" id="statFaltantes">-</div>
+            <div class="label">Faltantes</div>
+          </div>
+        </div>
+        
+        <div id="equiposList"></div>
+        
+        <button id="btnAdminLogout" class="btn btn-back" style="margin-top: 20px;">← Cerrar sesión</button>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      Club de Profesionales - Concepción del Uruguay<br>
+      Temporada 2026
+    </footer>
+  </div>
+  
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2rA6f2SsnVZbdHcl7PBEMmgQkgvRTlgQPgeaZ_X0E8UkAandOiRPemlkFLr1c2SDL/exec';
+    
+    let state = {
+      equipos: [],
+      jugadores: [],
+      selectedEquipo: null,
+      selectedJugador: null,
+      jugadorInfo: null,
+      dniNuevo: null,
+      primeraCarga: false,
+      adminClave: null,
+      isAdmin: false
+    };
+    
+    const $ = id => document.getElementById(id);
+    
+    const elements = {
+      mainContainer: $('mainContainer'),
+      playerForm: $('playerForm'),
+      adminPanel: $('adminPanel'),
+      adminLink: $('adminLink'),
+      headerSubtitle: $('headerSubtitle'),
+      equipoSelect: $('equipoSelect'),
+      jugadorSelect: $('jugadorSelect'),
+      dniInput: $('dniInput'),
+      grupoSanguineo: $('grupoSanguineo'),
+      condicionesMedicas: $('condicionesMedicas'),
+      medicacion: $('medicacion'),
+      contactoNombre: $('contactoNombre'),
+      contactoTel: $('contactoTel'),
+      obraSocial: $('obraSocial'),
+      message: $('message'),
+      btnStep1: $('btnStep1'),
+      btnStep2: $('btnStep2'),
+      btnStep3: $('btnStep3'),
+      btnGuardar: $('btnGuardar'),
+      btnBack2: $('btnBack2'),
+      btnBack3: $('btnBack3'),
+      btnBack4: $('btnBack4'),
+      btnNuevo: $('btnNuevo'),
+      playerInfoDisplay: $('playerInfoDisplay'),
+      displayNombre: $('displayNombre'),
+      displayEquipo: $('displayEquipo'),
+      adminLogin: $('adminLogin'),
+      adminDashboard: $('adminDashboard'),
+      adminClave: $('adminClave'),
+      adminMessage: $('adminMessage'),
+      btnAdminLogin: $('btnAdminLogin'),
+      btnAdminBack: $('btnAdminBack'),
+      btnAdminLogout: $('btnAdminLogout'),
+      btnRefresh: $('btnRefresh'),
+      equiposList: $('equiposList'),
+      statTotal: $('statTotal'),
+      statCompletados: $('statCompletados'),
+      statFaltantes: $('statFaltantes'),
+      statPctTotal: $('statPctTotal')
+    };
+    
+    function showMessage(text, type = 'error', elementId = 'message') {
+      const el = $(elementId);
+      el.textContent = text;
+      el.className = `message ${type} show`;
+      if (type === 'success') setTimeout(() => el.classList.remove('show'), 4000);
+    }
+    
+    function hideMessage(elementId = 'message') {
+      $(elementId).classList.remove('show');
+    }
+    
+    function setLoading(button, loading) {
+      if (loading) {
+        button.disabled = true;
+        button.dataset.originalText = button.innerHTML;
+        button.innerHTML = '<div class="spinner"></div> Cargando...';
+      } else {
+        button.disabled = false;
+        button.innerHTML = button.dataset.originalText || button.innerHTML;
+      }
+    }
+    
+    function goToStep(stepNum) {
+      document.querySelectorAll('#playerForm .step-content').forEach(el => el.classList.remove('active'));
+      const stepId = stepNum === 'success' ? 'stepSuccess' : `step${stepNum}`;
+      $(stepId).classList.add('active');
+      
+      document.querySelectorAll('.step-dot').forEach(dot => {
+        const dotStep = parseInt(dot.dataset.step);
+        dot.classList.remove('active', 'completed');
+        if (stepNum === 'success') dot.classList.add('completed');
+        else if (dotStep === stepNum) dot.classList.add('active');
+        else if (dotStep < stepNum) dot.classList.add('completed');
+      });
+      hideMessage();
+    }
+    
+    async function fetchAPI(action, params = {}) {
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.append('action', action);
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+      const response = await fetch(url.toString());
+      return response.json();
+    }
+    
+    async function postAPI(data) {
+      // Apps Script CORS workaround: usar GET con datos en query string
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.append('payload', JSON.stringify(data));
+      const response = await fetch(url.toString());
+      return response.json();
+    }
+    
+    async function loadEquipos() {
+      try {
+        const result = await fetchAPI('getEquipos');
+        if (result.success) {
+          state.equipos = result.data;
+          elements.equipoSelect.innerHTML = '<option value="">Seleccioná tu equipo...</option>';
+          state.equipos.forEach(equipo => {
+            const option = document.createElement('option');
+            option.value = equipo.id;
+            option.textContent = equipo.nombre;
+            elements.equipoSelect.appendChild(option);
+          });
+          elements.equipoSelect.disabled = false;
+        } else {
+          showMessage('Error al cargar equipos: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      }
+    }
+    
+    async function loadJugadores(equipoId) {
+      try {
+        setLoading(elements.btnStep1, true);
+        const result = await fetchAPI('getJugadores', { equipoId });
+        if (result.success) {
+          state.jugadores = result.data;
+          state.selectedEquipo = equipoId;
+          elements.jugadorSelect.innerHTML = '<option value="">Seleccioná tu nombre...</option>';
+          state.jugadores.forEach(jugador => {
+            const option = document.createElement('option');
+            option.value = jugador.id;
+            option.textContent = jugador.nombre;
+            elements.jugadorSelect.appendChild(option);
+          });
+          elements.jugadorSelect.disabled = false;
+          goToStep(2);
+        } else {
+          showMessage('Error al cargar jugadores: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnStep1, false);
+      }
+    }
+    
+    async function validarDNI() {
+      const dni = elements.dniInput.value.trim();
+      if (!dni || dni.length < 6) {
+        showMessage('Ingresá tu DNI sin puntos.');
+        return;
+      }
+      
+      try {
+        setLoading(elements.btnStep3, true);
+        const result = await postAPI({
+          action: 'validarDNI',
+          jugadorId: state.selectedJugador,
+          dni: dni
+        });
+        
+        if (result.success) {
+          state.jugadorInfo = result.jugador;
+          state.primeraCarga = result.primeraCarga;
+          state.dniNuevo = result.dniNuevo || null;
+          
+          elements.displayNombre.textContent = result.jugador.nombre;
+          const equipoNombre = state.equipos.find(e => e.id === state.selectedEquipo)?.nombre || state.selectedEquipo;
+          elements.displayEquipo.textContent = equipoNombre;
+          elements.playerInfoDisplay.style.display = 'block';
+          
+          if (result.datosMedicos) {
+            const dm = result.datosMedicos;
+            elements.grupoSanguineo.value = dm.grupoSanguineo || '';
+            elements.condicionesMedicas.value = dm.condicionesMedicas || 'Ninguna';
+            elements.medicacion.value = dm.medicacion || 'Ninguna';
+            elements.contactoNombre.value = dm.contactoNombre || '';
+            elements.contactoTel.value = dm.contactoTel || '';
+            elements.obraSocial.value = dm.obraSocial || '';
+          } else {
+            elements.condicionesMedicas.value = 'Ninguna';
+            elements.medicacion.value = 'Ninguna';
+          }
+          goToStep(4);
+        } else {
+          showMessage(result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnStep3, false);
+      }
+    }
+    
+    async function guardarDatos() {
+      const campos = [
+        { el: elements.grupoSanguineo, name: 'Grupo Sanguíneo' },
+        { el: elements.condicionesMedicas, name: 'Condiciones Médicas' },
+        { el: elements.medicacion, name: 'Medicación' },
+        { el: elements.contactoNombre, name: 'Contacto - Nombre' },
+        { el: elements.contactoTel, name: 'Contacto - Teléfono' },
+        { el: elements.obraSocial, name: 'Obra Social' }
+      ];
+      
+      for (const campo of campos) {
+        if (!campo.el.value.trim()) {
+          showMessage(`Completá el campo: ${campo.name}`);
+          campo.el.focus();
+          return;
+        }
+      }
+      
+      try {
+        setLoading(elements.btnGuardar, true);
+        const result = await postAPI({
+          action: 'guardarDatosMedicos',
+          jugadorId: state.selectedJugador,
+          grupoSanguineo: elements.grupoSanguineo.value,
+          condicionesMedicas: elements.condicionesMedicas.value.trim(),
+          medicacion: elements.medicacion.value.trim(),
+          contactoNombre: elements.contactoNombre.value.trim(),
+          contactoTel: elements.contactoTel.value.trim(),
+          obraSocial: elements.obraSocial.value.trim(),
+          dniNuevo: state.dniNuevo,
+          primeraCarga: state.primeraCarga
+        });
+        
+        if (result.success) {
+          goToStep('success');
+        } else {
+          showMessage('Error al guardar: ' + result.error);
+        }
+      } catch (error) {
+        showMessage('Error de conexión. Intentá nuevamente.');
+        console.error(error);
+      } finally {
+        setLoading(elements.btnGuardar, false);
+      }
+    }
+    
+    function resetForm() {
+      state.selectedJugador = null;
+      state.jugadorInfo = null;
+      state.dniNuevo = null;
+      state.primeraCarga = false;
+      
+      elements.equipoSelect.value = '';
+      elements.jugadorSelect.value = '';
+      elements.jugadorSelect.disabled = true;
+      elements.dniInput.value = '';
+      elements.grupoSanguineo.value = '';
+      elements.condicionesMedicas.value = 'Ninguna';
+      elements.medicacion.value = 'Ninguna';
+      elements.contactoNombre.value = '';
+      elements.contactoTel.value = '';
+      elements.obraSocial.value = '';
+      elements.playerInfoDisplay.style.display = 'none';
+      elements.btnStep1.disabled = true;
+      elements.btnStep2.disabled = true;
+      goToStep(1);
+    }
+    
+    // ADMIN
+    function showAdminPanel() {
+      elements.playerForm.style.display = 'none';
+      elements.adminPanel.classList.add('active');
+      elements.mainContainer.classList.add('admin-mode');
+      elements.headerSubtitle.textContent = 'Panel de Administración';
+      elements.adminLink.style.display = 'none';
+    }
+    
+    function hideAdminPanel() {
+      elements.playerForm.style.display = 'block';
+      elements.adminPanel.classList.remove('active');
+      elements.mainContainer.classList.remove('admin-mode');
+      elements.headerSubtitle.textContent = 'Ficha de Salud - Temporada 2026';
+      elements.adminLink.style.display = 'block';
+      elements.adminLogin.classList.add('active');
+      elements.adminDashboard.classList.remove('active');
+      elements.adminClave.value = '';
+      state.adminClave = null;
+      state.isAdmin = false;
+    }
+    
+    async function adminLoginFn() {
+      const clave = elements.adminClave.value.trim();
+      if (!clave) {
+        showMessage('Ingresá la clave', 'error', 'adminMessage');
+        return;
+      }
+      
+      try {
+        setLoading(elements.btnAdminLogin, true);
+        const result = await postAPI({ action: 'adminLogin', clave });
+        if (result.success) {
+          state.adminClave = clave;
+          state.isAdmin = true;
+          elements.adminLogin.classList.remove('active');
+          elements.adminDashboard.classList.add('active');
+          hideMessage('adminMessage');
+          loadEstadoEquipos();
+        } else {
+          showMessage(result.error, 'error', 'adminMessage');
+        }
+      } catch (error) {
+        showMessage('Error de conexión', 'error', 'adminMessage');
+      } finally {
+        setLoading(elements.btnAdminLogin, false);
+      }
+    }
+    
+    async function loadEstadoEquipos() {
+      try {
+        setLoading(elements.btnRefresh, true);
+        const result = await postAPI({ action: 'getEstadoEquipos', clave: state.adminClave });
+        if (result.success) {
+          renderEstadoEquipos(result.data);
+        } else {
+          showMessage(result.error, 'error', 'adminMessage');
+        }
+      } catch (error) {
+        showMessage('Error de conexión', 'error', 'adminMessage');
+      } finally {
+        setLoading(elements.btnRefresh, false);
+      }
+    }
+    
+    function renderEstadoEquipos(equipos) {
+      let totalJugadores = 0, totalCompletados = 0;
+      equipos.forEach(eq => {
+        totalJugadores += eq.total;
+        totalCompletados += eq.completados;
       });
       
-      // Si hay sesión válida, ir directo a la app
-      if (STATE.token) {
-        showApp();
-        return;
-      }
-    }
-  } catch(e) {
-    hideLoading();
-    console.error('Error init:', e);
-    // Fallback meses
-    STATE.meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  }
-  
-  showLogin();
-}
-
-// ══════════════════════════════════════════════════════════════════
-// LOADING
-// ══════════════════════════════════════════════════════════════════
-function showLoading(msg = 'Cargando...') {
-  document.getElementById('loading-text').textContent = msg;
-  document.getElementById('loading-overlay').classList.add('active');
-}
-
-function hideLoading() {
-  document.getElementById('loading-overlay').classList.remove('active');
-}
-
-// ══════════════════════════════════════════════════════════════════
-// API
-// ══════════════════════════════════════════════════════════════════
-async function api(accion, params = {}, loadingMsg = null) {
-  if (loadingMsg) showLoading(loadingMsg);
-  
-  try {
-    const url = new URL(API_URL);
-    url.searchParams.set('accion', accion);
-    if (STATE.token) url.searchParams.set('token', STATE.token);
-    for (const key in params) {
-      url.searchParams.set(key, params[key]);
-    }
-    
-    const res = await fetch(url.toString());
-    const data = await res.json();
-    
-    if (loadingMsg) hideLoading();
-    return data;
-  } catch(e) {
-    if (loadingMsg) hideLoading();
-    throw e;
-  }
-}
-
-async function apiPost(accion, params = {}, loadingMsg = null) {
-  if (loadingMsg) showLoading(loadingMsg);
-  
-  try {
-    const url = new URL(API_URL);
-    url.searchParams.set('accion', accion);
-    if (STATE.token) url.searchParams.set('token', STATE.token);
-    for (const key in params) {
-      url.searchParams.set(key, params[key]);
-    }
-    
-    const res = await fetch(url.toString(), { method: 'POST' });
-    const data = await res.json();
-    
-    if (loadingMsg) hideLoading();
-    return data;
-  } catch(e) {
-    if (loadingMsg) hideLoading();
-    throw e;
-  }
-}
-
-// POST con body para archivos grandes
-async function apiPostFile(accion, params = {}) {
-  try {
-    const url = new URL(API_URL);
-    url.searchParams.set('accion', accion);
-    if (STATE.token) url.searchParams.set('token', STATE.token);
-    
-    // Crear FormData con payload JSON
-    const formData = new FormData();
-    formData.append('payload', JSON.stringify(params));
-    
-    const res = await fetch(url.toString(), { 
-      method: 'POST',
-      body: formData
-    });
-    const data = await res.json();
-    return data;
-  } catch(e) {
-    console.error('apiPostFile error:', e);
-    throw e;
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════════════════════════════
-let loginMode = 'delegado';
-
-function setLoginMode(mode) {
-  loginMode = mode;
-  document.querySelectorAll('.login-tab').forEach((tab, i) => {
-    tab.classList.toggle('active', (i === 0 && mode === 'delegado') || (i === 1 && mode === 'admin'));
-  });
-  document.getElementById('equipo-group').style.display = mode === 'delegado' ? 'block' : 'none';
-  document.getElementById('login-pin').value = '';
-  document.getElementById('login-error').style.display = 'none';
-}
-
-// Auth se maneja en init()
-
-async function handleLogin(e) {
-  e.preventDefault();
-  const btn = document.getElementById('btn-login');
-  const errorDiv = document.getElementById('login-error');
-  
-  btn.disabled = true;
-  btn.textContent = 'Ingresando...';
-  errorDiv.style.display = 'none';
-  
-  try {
-    let res;
-    if (loginMode === 'delegado') {
-      const equipoId = document.getElementById('login-equipo').value;
-      const pin = document.getElementById('login-pin').value;
+      const pctTotal = totalJugadores > 0 ? Math.round((totalCompletados / totalJugadores) * 100) : 0;
       
-      // Validar que seleccionó equipo
-      if (!equipoId) {
-        errorDiv.textContent = 'Seleccioná un equipo';
-        errorDiv.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Ingresar';
-        return;
+      elements.statTotal.textContent = totalJugadores;
+      elements.statCompletados.textContent = totalCompletados;
+      elements.statFaltantes.textContent = totalJugadores - totalCompletados;
+      elements.statPctTotal.textContent = pctTotal + '%';
+      
+      // Usar categoria del backend
+      const libres = equipos.filter(e => (e.categoria || '').toLowerCase() !== 'senior');
+      const seniors = equipos.filter(e => (e.categoria || '').toLowerCase() === 'senior');
+      
+      // Calcular stats por categoría
+      const statsLibre = calcularStatsCat(libres);
+      const statsSenior = calcularStatsCat(seniors);
+      
+      let html = '';
+      if (libres.length > 0) {
+        html += `<div class="section-divider">Categoría Libre <span class="cat-pct">(${statsLibre.pct}% - ${statsLibre.completados}/${statsLibre.total})</span></div>`;
+        libres.forEach(eq => html += renderEquipoCard(eq));
+      }
+      if (seniors.length > 0) {
+        html += `<div class="section-divider">Categoría Senior <span class="cat-pct">(${statsSenior.pct}% - ${statsSenior.completados}/${statsSenior.total})</span></div>`;
+        seniors.forEach(eq => html += renderEquipoCard(eq));
       }
       
-      showLoading('Verificando credenciales...');
-      res = await api('login', { equipoId, pin });
+      elements.equiposList.innerHTML = html;
       
-      if (res.ok) {
-        STATE.token = res.token;
-        STATE.rol = 'delegado';
-        STATE.equipo = res.equipo;
-        localStorage.setItem('hockey_token', res.token);
-        localStorage.setItem('hockey_rol', 'delegado');
-        localStorage.setItem('hockey_equipo', JSON.stringify(res.equipo));
-      }
-    } else {
-      const pin = document.getElementById('login-pin').value;
-      showLoading('Verificando credenciales...');
-      res = await api('loginAdmin', { pin });
+      document.querySelectorAll('.btn-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const list = this.closest('.equipo-card').querySelector('.faltantes-list');
+          list.classList.toggle('show');
+          this.textContent = list.classList.contains('show') ? 'Ocultar' : 'Ver faltantes';
+        });
+      });
+    }
+    
+    function calcularStatsCat(equipos) {
+      let total = 0, completados = 0;
+      equipos.forEach(eq => {
+        total += eq.total;
+        completados += eq.completados;
+      });
+      const pct = total > 0 ? Math.round((completados / total) * 100) : 0;
+      return { total, completados, pct };
+    }
+    
+    function renderEquipoCard(equipo) {
+      const pct = equipo.total > 0 ? Math.round((equipo.completados / equipo.total) * 100) : 0;
+      const faltantes = equipo.faltantes || [];
       
-      if (res.ok) {
-        STATE.token = res.token;
-        STATE.rol = 'admin';
-        STATE.equipo = null;
-        STATE.nombreAdmin = res.nombreAdmin || 'Admin';
-        localStorage.setItem('hockey_token', res.token);
-        localStorage.setItem('hockey_rol', 'admin');
-        localStorage.setItem('hockey_nombreAdmin', STATE.nombreAdmin);
-        localStorage.removeItem('hockey_equipo');
-      }
-    }
-    
-    if (res.ok) {
-      hideLoading();
-      showApp();
-    } else {
-      hideLoading();
-      errorDiv.textContent = res.msg || 'Error al ingresar';
-      errorDiv.style.display = 'block';
-    }
-  } catch(e) {
-    hideLoading();
-    errorDiv.textContent = 'Error de conexión';
-    errorDiv.style.display = 'block';
-  }
-  
-  btn.disabled = false;
-  btn.textContent = 'Ingresar';
-}
-
-function logout() {
-  api('logout');
-  clearSession();
-  showLogin();
-}
-
-function clearSession() {
-  STATE.token = null;
-  STATE.rol = null;
-  STATE.equipo = null;
-  STATE.nombreAdmin = null;
-  localStorage.removeItem('hockey_token');
-  localStorage.removeItem('hockey_rol');
-  localStorage.removeItem('hockey_equipo');
-  localStorage.removeItem('hockey_nombreAdmin');
-}
-
-// ══════════════════════════════════════════════════════════════════
-// SCREENS
-// ══════════════════════════════════════════════════════════════════
-function showLogin() {
-  document.getElementById('splash-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-}
-
-function showApp() {
-  document.getElementById('splash-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  
-  const badge = document.getElementById('badge-rol');
-  const headerEquipo = document.getElementById('header-equipo');
-  
-  if (STATE.rol === 'admin') {
-    badge.textContent = STATE.nombreAdmin;
-    badge.className = 'badge-role badge-admin';
-    headerEquipo.textContent = 'Panel Administrador';
-    document.getElementById('nav-delegado').style.display = 'none';
-    document.getElementById('nav-admin').style.display = 'flex';
-    
-    // Activar tab resumen
-    document.getElementById('tab-resumen').classList.add('active');
-    document.querySelector('#nav-admin .nav-tab').classList.add('active');
-    cargarResumenAdmin();
-  } else {
-    badge.textContent = 'Delegado';
-    badge.className = 'badge-role badge-delegado';
-    headerEquipo.textContent = STATE.equipo?.nombre || '';
-    document.getElementById('nav-delegado').style.display = 'flex';
-    document.getElementById('nav-admin').style.display = 'none';
-    
-    // Activar tab pagos
-    document.getElementById('tab-pagos').classList.add('active');
-    document.querySelector('#nav-delegado .nav-tab').classList.add('active');
-    cargarDatosDelegado();
-  }
-}
-
-function showTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  
-  document.getElementById(tabId).classList.add('active');
-  
-  // Marcar el tab activo en la navegación
-  document.querySelectorAll('.nav-tab').forEach(t => {
-    if (t.getAttribute('onclick')?.includes(tabId)) {
-      t.classList.add('active');
-    }
-  });
-  
-  // Solo renderizar UI, no llamar API (los datos ya están en STATE)
-  if (tabId === 'tab-pagos') cargarPagosUI();
-  if (tabId === 'tab-habilitaciones') renderHabilitaciones();
-  if (tabId === 'tab-gestion') cargarSelectBaja();
-  if (tabId === 'tab-resumen') renderResumenAdmin();
-  if (tabId === 'tab-estadisticas') renderEstadisticas();
-  if (tabId === 'tab-comprobantes') renderComprobantesAdmin();
-  if (tabId === 'tab-jugadores') renderJugadoresAdmin();
-  if (tabId === 'tab-solicitudes') renderSolicitudesAdmin();
-  if (tabId === 'tab-config') renderConfig();
-}
-
-// ══════════════════════════════════════════════════════════════════
-// DELEGADO
-// ══════════════════════════════════════════════════════════════════
-async function cargarDatosDelegado() {
-  // Si ya tenemos datos en cache válido, solo refrescar UI
-  if (isCacheValid('jugadores') && STATE.jugadores.length > 0) {
-    llenarSelectMeses();
-    cargarPagosUI();
-    return;
-  }
-  
-  showLoading('Cargando datos...');
-  
-  try {
-    // Una sola llamada que trae todo
-    const res = await api('getDatosDelegado');
-    
-    if (res.ok) {
-      STATE.meses = res.meses || ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-      STATE.jugadores = res.jugadores || [];
-      STATE.pagos = res.pagos || [];
-      STATE.cache.jugadores = Date.now();
-      STATE.cache.pagos = Date.now();
-    }
-  } catch(e) {
-    console.error('Error:', e);
-    // Fallback meses
-    if (!STATE.meses.length) {
-      STATE.meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-    }
-  }
-  
-  hideLoading();
-  llenarSelectMeses();
-  cargarPagosUI();
-}
-
-function llenarSelectMeses() {
-  const selectMes = document.getElementById('select-mes');
-  if (selectMes.options.length > 0) return; // Ya está lleno
-  
-  selectMes.innerHTML = '';
-  const mesActual = new Date().getMonth();
-  STATE.meses.forEach((m, i) => {
-    const selected = i === mesActual ? 'selected' : '';
-    selectMes.innerHTML += `<option value="${m}" ${selected}>${m}</option>`;
-  });
-}
-
-async function cargarPagos() {
-  showLoading('Actualizando pagos...');
-  
-  const pagosRes = await api('getPagos');
-  if (pagosRes.ok) {
-    STATE.pagos = pagosRes.pagos;
-    STATE.cache.pagos = Date.now();
-  }
-  
-  hideLoading();
-  cargarPagosUI();
-}
-
-function cargarPagosUI() {
-  const mes = document.getElementById('select-mes').value;
-  const tbody = document.getElementById('tabla-pagos');
-  tbody.innerHTML = '';
-  
-  let totalJug = 0, totalPagados = 0, totalBonif = 0;
-  
-  STATE.jugadores.forEach(jug => {
-    const pago = STATE.pagos.find(p => p.jugadorId === jug.id && p.mes === mes);
-    const esBonif = jug.tipoCuota.includes('BONIF') || jug.tipoCuota.includes('BECA');
-    
-    totalJug++;
-    if (esBonif) totalBonif++;
-    
-    let estadoHTML, comprobanteHTML;
-    
-    if (esBonif) {
-      estadoHTML = '<span class="estado-badge estado-aprobado">✓ Bonificado</span>';
-      comprobanteHTML = '<span style="color:var(--gray-400);">—</span>';
-    } else if (!pago) {
-      estadoHTML = '<span class="estado-badge estado-sin-cargar">Sin cargar</span>';
-      comprobanteHTML = `<button class="btn btn-sm btn-mint" onclick="abrirCargarPara('${jug.id}', '${jug.nombre}', '${mes}')">📤 Cargar</button>`;
-    } else if (pago.estado === 'Pendiente') {
-      estadoHTML = '<span class="estado-badge estado-pendiente">⏳ Pendiente</span>';
-      comprobanteHTML = `<a href="${pago.driveUrl}" target="_blank" class="btn btn-sm btn-sky">👁️ Ver</a>`;
-      totalPagados++;
-    } else if (pago.estado === 'Aprobado') {
-      estadoHTML = '<span class="estado-badge estado-aprobado">✓ Aprobado</span>';
-      comprobanteHTML = `<a href="${pago.driveUrl}" target="_blank" class="btn btn-sm btn-sky">👁️ Ver</a>`;
-      totalPagados++;
-    } else {
-      estadoHTML = `<span class="estado-badge estado-rechazado" title="${pago.obs || ''}">✕ Rechazado</span>`;
-      comprobanteHTML = `
-        <a href="${pago.driveUrl}" target="_blank" class="btn btn-sm btn-gray" style="margin-right:4px;">Ver anterior</a>
-        <button class="btn btn-sm btn-mint" onclick="abrirCargarPara('${jug.id}', '${jug.nombre}', '${mes}')">🔄 Recargar</button>
-      `;
-    }
-    
-    const tipoBadgeClass = esBonif ? 'tipo-badge bonif' : 'tipo-badge';
-    
-    tbody.innerHTML += `
-      <tr>
-        <td class="jugador-nombre">${jug.nombre}</td>
-        <td><span class="${tipoBadgeClass}">${jug.tipoCuota}</span></td>
-        <td>${estadoHTML}</td>
-        <td>${comprobanteHTML}</td>
-      </tr>
-    `;
-  });
-  
-  // Contador
-  const faltantes = totalJug - totalBonif - totalPagados;
-  document.getElementById('contador-pagos').innerHTML = `
-    <span style="color:var(--success);">${totalPagados} cargados</span> · 
-    <span style="color:var(--warning);">${faltantes} sin cargar</span> · 
-    <span style="color:var(--lavender-dark);">${totalBonif} bonificados</span>
-  `;
-  
-  if (STATE.jugadores.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="icon">👥</div><h3>No hay jugadores cargados</h3></td></tr>';
-  }
-}
-
-async function cargarHabilitaciones() {
-  showLoading('Consultando habilitaciones...');
-  const res = await api('getHabilitaciones');
-  hideLoading();
-  
-  if (res.ok) {
-    STATE.habilitaciones = res.habilitaciones;
-    STATE.mesActualHab = res.mesActual;
-    STATE.cache.habilitaciones = Date.now();
-  }
-  renderHabilitaciones();
-}
-
-function renderHabilitaciones() {
-  // Si no hay datos, cargar
-  if (!STATE.habilitaciones) {
-    cargarHabilitaciones();
-    return;
-  }
-  
-  document.getElementById('mes-actual-hab').textContent = STATE.mesActualHab || '';
-  const tbody = document.getElementById('tabla-habilitaciones');
-  tbody.innerHTML = '';
-  
-  STATE.habilitaciones.forEach(h => {
-    const estadoHTML = h.habilitado 
-      ? '<span class="estado-badge estado-habilitado">✓ Habilitado/a</span>'
-      : '<span class="estado-badge estado-inhabilitado">✕ Inhabilitado/a</span>';
-    
-    const mesesStr = h.mesesPagados.length > 0 ? h.mesesPagados.join(', ') : '-';
-    const tipoBadgeClass = h.tipoCuota.includes('BONIF') || h.tipoCuota.includes('BECA') ? 'tipo-badge bonif' : 'tipo-badge';
-    
-    tbody.innerHTML += `
-      <tr>
-        <td class="jugador-nombre">${h.nombre}</td>
-        <td><span class="${tipoBadgeClass}">${h.tipoCuota}</span></td>
-        <td>${estadoHTML}</td>
-        <td style="font-size:0.8rem;color:var(--gray-500);">${mesesStr}</td>
-      </tr>
-    `;
-  });
-}
-
-async function solicitarAlta(e) {
-  e.preventDefault();
-  
-  const nombre = document.getElementById('alta-nombre').value;
-  const dni = document.getElementById('alta-dni').value;
-  const fechaNac = document.getElementById('alta-fechanac').value;
-  const tipoCuota = document.getElementById('alta-tipocuota').value;
-  
-  showLoading('Enviando solicitud de alta...');
-  const res = await apiPost('solicitarAlta', { nombre, dni, fechaNac, tipoCuota });
-  hideLoading();
-  
-  if (res.ok) {
-    toast('✅ Solicitud de alta enviada correctamente', 'success');
-    document.getElementById('form-alta').reset();
-  } else {
-    toast(res.msg || 'Error al enviar solicitud', 'error');
-  }
-}
-
-function cargarSelectBaja() {
-  const select = document.getElementById('baja-jugador');
-  select.innerHTML = '<option value="">Seleccionar jugador/a...</option>';
-  STATE.jugadores.forEach(j => {
-    select.innerHTML += `<option value="${j.id}">${j.nombre}</option>`;
-  });
-}
-
-async function solicitarBaja(e) {
-  e.preventDefault();
-  
-  const jugadorId = document.getElementById('baja-jugador').value;
-  const motivo = document.getElementById('baja-motivo').value;
-  
-  if (!jugadorId) {
-    toast('Seleccioná un jugador/a', 'error');
-    return;
-  }
-  
-  const jugador = STATE.jugadores.find(j => j.id === jugadorId);
-  if (!confirm(`¿Confirmar solicitud de baja para ${jugador?.nombre}?`)) return;
-  
-  showLoading('Enviando solicitud de baja...');
-  const res = await apiPost('solicitarBaja', { jugadorId, motivo });
-  hideLoading();
-  
-  if (res.ok) {
-    toast('✅ Solicitud de baja enviada correctamente', 'success');
-    document.getElementById('form-baja').reset();
-  } else {
-    toast(res.msg || 'Error al enviar solicitud', 'error');
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// CARGAR COMPROBANTE INDIVIDUAL
-// ══════════════════════════════════════════════════════════════════
-// Variable global para el archivo seleccionado
-let archivoSeleccionado = null;
-
-function abrirCargarPara(jugadorId, nombreJugador, mes) {
-  document.getElementById('cargar-jugador-id').value = jugadorId;
-  document.getElementById('cargar-mes').value = mes;
-  document.getElementById('cargar-nombre-jugador').textContent = nombreJugador;
-  document.getElementById('cargar-mes-display').textContent = mes;
-  limpiarArchivo();
-  document.getElementById('modal-cargar').classList.add('active');
-  
-  // Setup drag and drop
-  const dropZone = document.getElementById('drop-zone');
-  dropZone.addEventListener('dragover', handleDragOver);
-  dropZone.addEventListener('dragleave', handleDragLeave);
-  dropZone.addEventListener('drop', handleDrop);
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  e.currentTarget.classList.add('drag-over');
-}
-
-function handleDragLeave(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  e.currentTarget.classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  e.currentTarget.classList.remove('drag-over');
-  
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    procesarArchivo(files[0]);
-  }
-}
-
-function handleFileSelect(e) {
-  const files = e.target.files;
-  if (files.length > 0) {
-    procesarArchivo(files[0]);
-  }
-}
-
-function procesarArchivo(file) {
-  // Validar tipo
-  const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
-  if (!tiposPermitidos.includes(file.type)) {
-    toast('Solo se permiten imágenes (JPG, PNG) o PDF', 'error');
-    return;
-  }
-  
-  // Validar tamaño (10MB)
-  if (file.size > 10 * 1024 * 1024) {
-    toast('El archivo no puede superar 10MB', 'error');
-    return;
-  }
-  
-  archivoSeleccionado = file;
-  
-  // Mostrar preview
-  const dropContent = document.getElementById('drop-zone-content');
-  const previewContainer = document.getElementById('preview-container');
-  const previewImg = document.getElementById('preview-img');
-  const previewPdf = document.getElementById('preview-pdf');
-  const previewPdfName = document.getElementById('preview-pdf-name');
-  
-  dropContent.style.display = 'none';
-  previewContainer.style.display = 'block';
-  
-  if (file.type === 'application/pdf') {
-    previewImg.style.display = 'none';
-    previewPdf.style.display = 'block';
-    previewPdfName.textContent = file.name;
-  } else {
-    previewPdf.style.display = 'none';
-    previewImg.style.display = 'block';
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      previewImg.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function limpiarArchivo() {
-  archivoSeleccionado = null;
-  document.getElementById('file-input').value = '';
-  document.getElementById('drop-zone-content').style.display = 'block';
-  document.getElementById('preview-container').style.display = 'none';
-  document.getElementById('preview-img').src = '';
-  document.getElementById('preview-img').style.display = 'block';
-  document.getElementById('preview-pdf').style.display = 'none';
-}
-
-async function enviarComprobante() {
-  const jugadorId = document.getElementById('cargar-jugador-id').value;
-  const mes = document.getElementById('cargar-mes').value;
-  
-  if (!archivoSeleccionado) {
-    toast('Seleccioná un archivo (foto o PDF)', 'error');
-    return;
-  }
-  
-  showLoading('Subiendo comprobante...');
-  
-  try {
-    // Convertir archivo a base64
-    const base64 = await fileToBase64(archivoSeleccionado);
-    
-    // Usar apiPostFile para archivos grandes (manda en body, no en URL)
-    const res = await apiPostFile('cargarComprobante', { 
-      jugadorId, 
-      mes, 
-      archivo: base64,
-      nombreArchivo: archivoSeleccionado.name,
-      tipoArchivo: archivoSeleccionado.type
-    });
-    
-    hideLoading();
-    
-    if (res.ok) {
-      toast('✅ Comprobante cargado correctamente', 'success');
-      cerrarModal('modal-cargar');
-      limpiarArchivo();
-      cargarPagos();
-    } else {
-      toast(res.msg || 'Error al cargar comprobante', 'error');
-    }
-  } catch(e) {
-    hideLoading();
-    toast('Error de conexión al subir', 'error');
-    console.error(e);
-  }
-}
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      // Extraer solo la parte base64 (sin el prefijo data:...)
-      const base64 = reader.result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-// ══════════════════════════════════════════════════════════════════
-// ADMIN
-// ══════════════════════════════════════════════════════════════════
-async function cargarResumenAdmin() {
-  showLoading('Cargando resumen...');
-  const res = await api('getResumen');
-  if (res.ok) {
-    STATE.resumen = res.resumen;
-    STATE.cache.resumen = Date.now();
-  }
-  
-  // Cargar pagos pendientes
-  const pagosRes = await api('getAllPagos', { estado: 'Pendiente' });
-  hideLoading();
-  if (pagosRes.ok) {
-    STATE.pagosPendientesAdmin = pagosRes.pagos;
-  }
-  
-  renderResumenAdmin();
-}
-
-function renderResumenAdmin() {
-  // Si no hay datos, cargar
-  if (!STATE.resumen) {
-    cargarResumenAdmin();
-    return;
-  }
-  
-  document.getElementById('stat-pendientes').textContent = STATE.resumen.pagosPendientes || 0;
-  document.getElementById('stat-aprobados').textContent = STATE.resumen.pagosAprobados || 0;
-  document.getElementById('stat-rechazados').textContent = STATE.resumen.pagosRechazados || 0;
-  document.getElementById('stat-solicitudes').textContent = STATE.resumen.solicitudesPendientes || 0;
-  
-  // Renderizar badges de equipos con porcentajes
-  const container = document.getElementById('resumen-equipos-container');
-  const porEquipo = STATE.resumen.porEquipo || [];
-  
-  if (porEquipo.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><h3>Sin datos de equipos</h3></div>';
-  } else {
-    let html = '<div class="equipo-badge-grid">';
-    
-    porEquipo.forEach(eq => {
-      const total = eq.total || 0;
-      const aprobados = eq.aprobados || 0;
-      const pendientes = eq.pendientes || 0;
-      const rechazados = eq.rechazados || 0;
-      const cargados = aprobados + pendientes + rechazados;
-      const pct = total > 0 ? Math.round(cargados / total * 100) : 0;
-      const sinCargar = Math.max(0, total - cargados);
+      let statusClass = 'vacio';
+      if (pct === 100) statusClass = 'completo';
+      else if (pct > 0) statusClass = 'parcial';
       
-      // Determinar clase de color
-      let colorClass = 'ok';
-      if (pct < 25) colorClass = 'bajo';
-      else if (pct < 70) colorClass = 'medio';
+      // WhatsApp directo al delegado si tiene teléfono
+      const whatsappMsg = armarMensajeWhatsApp(equipo.nombre, faltantes);
+      const tel = equipo.telefonoDelegado || '';
+      const whatsappUrl = tel 
+        ? `https://wa.me/${tel}?text=${encodeURIComponent(whatsappMsg)}`
+        : `https://wa.me/?text=${encodeURIComponent(whatsappMsg)}`;
       
-      html += `
-        <div class="equipo-badge ${colorClass}">
-          <div class="badge-nombre">${eq.nombre}</div>
-          <div class="badge-pct">${pct}%</div>
-          <div class="badge-detalle">✓${aprobados} ⏳${pendientes} ✕${rechazados}</div>
-        </div>
-      `;
-    });
-    
-    html += '</div>';
-    
-    // Leyenda
-    html += `
-      <div style="display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:0.75rem;color:var(--gray-500);">
-        <span>🔴 &lt;25%</span>
-        <span>🟡 25-69%</span>
-        <span>🟢 ≥70%</span>
-      </div>
-    `;
-    
-    container.innerHTML = html;
-  }
-  
-  // Rechazos del mes
-  const rechazos = STATE.resumen.rechazosDelMes || [];
-  const cardRechazos = document.getElementById('card-rechazos-mes');
-  const listaRechazos = document.getElementById('lista-rechazos-mes');
-  
-  if (rechazos.length > 0) {
-    cardRechazos.style.display = 'block';
-    let rechHtml = '';
-    
-    rechazos.forEach(r => {
-      rechHtml += `
-        <div class="comprobante-card-mobile" style="border-left:3px solid var(--danger);">
-          <div class="card-header">
-            <div class="card-info">
-              <div class="card-nombre">${r.nombre}</div>
-              <div class="card-meta">${(r.equipoId||'').replace(/_/g,' ')} · ${r.mes}</div>
-              ${r.obs ? `<div style="font-size:0.8rem;color:var(--danger);margin-top:4px;">📝 ${r.obs}</div>` : ''}
-            </div>
-            <button class="btn btn-sm btn-sky" onclick='abrirModalVer("${r.id}", ${JSON.stringify(r).replace(/'/g, "\\'")})'>👁️</button>
+      const delegadoInfo = equipo.nombreDelegado ? `<div class="equipo-delegado">Delegado: ${equipo.nombreDelegado}</div>` : '';
+      
+      let faltantesHtml = '';
+      if (faltantes.length > 0) {
+        faltantesHtml = `
+          <div class="faltantes-list">
+            <h4>Faltantes (${faltantes.length})</h4>
+            <ul>${faltantes.map(f => `<li>${f}</li>`).join('')}</ul>
           </div>
-        </div>
-      `;
-    });
-    
-    listaRechazos.innerHTML = rechHtml;
-  } else {
-    cardRechazos.style.display = 'none';
-  }
-}
-
-async function cargarEstadisticas() {
-  showLoading('Calculando estadísticas...');
-  const mes = document.getElementById('select-mes-stats')?.value || '';
-  const res = await api('getEstadisticas', { mes });
-  hideLoading();
-  
-  if (res.ok) {
-    STATE.estadisticas = res.estadisticas;
-    STATE.cache.estadisticas = Date.now();
-  }
-  renderEstadisticas();
-}
-
-function renderEstadisticas() {
-  // Llenar select meses si está vacío
-  const selectMes = document.getElementById('select-mes-stats');
-  if (selectMes.options.length <= 1) {
-    STATE.meses.forEach(m => {
-      selectMes.innerHTML += `<option value="${m}">${m}</option>`;
-    });
-  }
-  
-  // Si no hay datos, cargar
-  if (!STATE.estadisticas) {
-    cargarEstadisticas();
-    return;
-  }
-  
-  document.getElementById('stat-recaudacion').textContent = '$' + (STATE.estadisticas.totalRecaudado || 0).toLocaleString('es-AR');
-  document.getElementById('stat-jugadores').textContent = STATE.estadisticas.totalJugadores || 0;
-  
-  // Por equipo
-  const divEquipos = document.getElementById('stats-por-equipo');
-  divEquipos.innerHTML = '';
-  for (const eq in STATE.estadisticas.porEquipo) {
-    divEquipos.innerHTML += `
-      <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--gray-100);">
-        <span style="font-weight:600;">${eq}</span>
-        <span style="font-weight:700;color:var(--mint-dark);">${STATE.estadisticas.porEquipo[eq]} pagos</span>
-      </div>
-    `;
-  }
-}
-
-async function cargarComprobantesAdmin() {
-  showLoading('Cargando comprobantes...');
-  const res = await api('getAllPagos');
-  hideLoading();
-  if (res.ok) {
-    STATE.todosLosPagos = res.pagos;
-    STATE.cache.comprobantes = Date.now();
-  }
-  renderComprobantesAdmin();
-}
-
-function renderComprobantesAdmin() {
-  // Si no hay datos, cargar
-  if (!STATE.todosLosPagos) {
-    cargarComprobantesAdmin();
-    return;
-  }
-  
-  const container = document.getElementById('comprobantes-container');
-  const filtro = STATE.filtroComprobantes;
-  const pagos = filtro === 'todos' ? STATE.todosLosPagos : STATE.todosLosPagos.filter(p => p.estado === filtro);
-  
-  const esMobile = window.innerWidth < 640;
-  
-  if (esMobile) {
-    // Vista de cards para mobile
-    let html = '';
-    pagos.forEach(p => {
-      let estadoClass, estadoText;
-      if (p.estado === 'Pendiente') { estadoClass = 'estado-pendiente'; estadoText = '⏳ Pendiente'; }
-      else if (p.estado === 'Aprobado') { estadoClass = 'estado-aprobado'; estadoText = '✓ Aprobado'; }
-      else { estadoClass = 'estado-rechazado'; estadoText = '✕ Rechazado'; }
-      
-      let acciones = `<button class="btn btn-sm btn-sky" onclick='abrirModalVer("${p.id}", ${JSON.stringify(p).replace(/'/g, "\\'")})'>👁️ Ver</button>`;
-      if (p.estado === 'Pendiente') {
-        acciones += `
-          <button class="btn btn-sm btn-success" onclick="aprobarPago('${p.id}')">✓</button>
-          <button class="btn btn-sm btn-danger" onclick="abrirModalRechazar('${p.id}','${(p.nombre||'').replace(/'/g,"\\'")}','${p.mes}','${p.equipoId}')">✕</button>
+          <div class="equipo-actions">
+            <button class="btn btn-toggle">Ver faltantes</button>
+            <a href="${whatsappUrl}" target="_blank" class="btn btn-whatsapp">📱 WhatsApp</a>
+          </div>
         `;
       }
       
-      html += `
-        <div class="comprobante-card-mobile">
-          <div class="card-row">
-            <div class="card-info">
-              <div class="card-nombre">${p.nombre}</div>
-              <div class="card-meta">${(p.equipoId||'').replace(/_/g,' ')} · ${p.mes}</div>
-              ${p.fechaCarga ? `<div class="card-fecha">📅 ${p.fechaCarga}</div>` : ''}
+      return `
+        <div class="equipo-card ${statusClass}">
+          <div class="equipo-header">
+            <div>
+              <span class="equipo-nombre">${equipo.nombre}</span>
+              ${delegadoInfo}
             </div>
-            <span class="estado-badge ${estadoClass}">${estadoText}</span>
+            <span class="equipo-contador"><strong>${equipo.completados}</strong> / ${equipo.total}</span>
           </div>
-          <div class="card-actions">${acciones}</div>
+          <div class="progress-bar"><div class="fill" style="width: ${pct}%"></div></div>
+          ${faltantesHtml}
         </div>
       `;
-    });
-    
-    if (pagos.length === 0) {
-      html = '<div class="empty-state"><div class="icon">📄</div><h3>No hay comprobantes</h3></div>';
     }
     
-    container.innerHTML = html;
-  } else {
-    // Vista de tabla para desktop
-    let html = `
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Jugador/a</th>
-            <th>Equipo</th>
-            <th>Mes</th>
-            <th>Estado</th>
-            <th>Fecha Carga</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-    
-    pagos.forEach(p => {
-      let estadoHTML;
-      if (p.estado === 'Pendiente') estadoHTML = '<span class="estado-badge estado-pendiente">⏳ Pendiente</span>';
-      else if (p.estado === 'Aprobado') estadoHTML = '<span class="estado-badge estado-aprobado">✓ Aprobado</span>';
-      else estadoHTML = '<span class="estado-badge estado-rechazado">✕ Rechazado</span>';
+    function armarMensajeWhatsApp(equipoNombre, faltantes) {
+      if (faltantes.length === 0) return `CDP: ${equipoNombre} tiene todas las fichas completas!`;
       
-      let acciones = `<button class="btn btn-sm btn-sky" onclick='abrirModalVer("${p.id}", ${JSON.stringify(p).replace(/'/g, "\\'")})'>👁️</button>`;
-      if (p.estado === 'Pendiente') {
-        acciones += `
-          <button class="btn btn-sm btn-success" onclick="aprobarPago('${p.id}')">✓</button>
-          <button class="btn btn-sm btn-danger" onclick="abrirModalRechazar('${p.id}','${(p.nombre||'').replace(/'/g,"\\'")}','${p.mes}','${p.equipoId}')">✕</button>
-        `;
-      }
-      
-      html += `
-        <tr>
-          <td>#${p.id}</td>
-          <td class="jugador-nombre">${p.nombre}</td>
-          <td>${(p.equipoId||'').replace(/_/g,' ')}</td>
-          <td>${p.mes}</td>
-          <td>${estadoHTML}</td>
-          <td>${p.fechaCarga || '—'}</td>
-          <td class="btn-actions">${acciones}</td>
-        </tr>
-      `;
+      let msg = `*CDP Salud - ${equipoNombre}*\n\n*Faltan ${faltantes.length}:*\n`;
+      faltantes.forEach(f => msg += `• ${f}\n`);
+      msg += `\nhttps://cdpcedelu.github.io/SaludCDP/`;
+      return msg;
+    }
+    
+    // EVENTS
+    elements.equipoSelect.addEventListener('change', function() {
+      elements.btnStep1.disabled = !this.value;
     });
     
-    if (pagos.length === 0) {
-      html += '<tr><td colspan="7" class="empty-state"><div class="icon">📄</div><h3>No hay comprobantes</h3></td></tr>';
-    }
-    
-    html += '</tbody></table>';
-    container.innerHTML = html;
-  }
-}
-
-function filtrarComprobantes(filtro, btn) {
-  STATE.filtroComprobantes = filtro;
-  document.querySelectorAll('.filtro-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderComprobantesAdmin(); // Solo render, no API
-}
-
-async function cargarJugadoresAdmin() {
-  showLoading('Cargando jugadores...');
-  const equipoId = document.getElementById('filtro-equipo-jugadores')?.value || '';
-  const res = await api('getJugadoresAdmin', { equipoId });
-  hideLoading();
-  if (res.ok) {
-    STATE.jugadoresAdmin = res.jugadores;
-    STATE.cache.jugadoresAdmin = Date.now();
-  }
-  renderJugadoresAdmin();
-}
-
-function renderJugadoresAdmin() {
-  // Llenar filtro equipos si está vacío
-  const filtroEq = document.getElementById('filtro-equipo-jugadores');
-  if (filtroEq.options.length <= 1) {
-    STATE.equipos.forEach(eq => {
-      filtroEq.innerHTML += `<option value="${eq.id}">${eq.nombre}</option>`;
+    elements.jugadorSelect.addEventListener('change', function() {
+      state.selectedJugador = this.value;
+      elements.btnStep2.disabled = !this.value;
     });
-  }
-  
-  // Si no hay datos, cargar
-  if (!STATE.jugadoresAdmin) {
-    cargarJugadoresAdmin();
-    return;
-  }
-  
-  const tbody = document.getElementById('tabla-jugadores-admin');
-  tbody.innerHTML = '';
-  
-  STATE.jugadoresAdmin.forEach(j => {
-    const tipoBadgeClass = j.tipoCuota.includes('BONIF') || j.tipoCuota.includes('BECA') ? 'tipo-badge bonif' : 'tipo-badge';
     
-    tbody.innerHTML += `
-      <tr>
-        <td>#${j.id}</td>
-        <td class="jugador-nombre">${j.nombre}</td>
-        <td>${j.equipoId}</td>
-        <td>${j.dni || '-'}</td>
-        <td><span class="${tipoBadgeClass}">${j.tipoCuota}</span></td>
-        <td class="btn-actions">
-          <button class="btn btn-sm btn-peach" onclick="eliminarJugador('${j.id}', '${j.nombre}')">🗑️</button>
-        </td>
-      </tr>
-    `;
-  });
-  
-  if (STATE.jugadoresAdmin.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="icon">👥</div><h3>No hay jugadores</h3></td></tr>';
-  }
-}
-
-async function cargarSolicitudesAdmin() {
-  showLoading('Cargando solicitudes...');
-  const res = await api('getSolicitudes');
-  hideLoading();
-  if (res.ok) {
-    STATE.solicitudes = res.solicitudes;
-    STATE.cache.solicitudes = Date.now();
-  }
-  renderSolicitudesAdmin();
-}
-
-function renderSolicitudesAdmin() {
-  // Si no hay datos, cargar
-  if (!STATE.solicitudes) {
-    cargarSolicitudesAdmin();
-    return;
-  }
-  
-  const tbody = document.getElementById('tabla-solicitudes-admin');
-  tbody.innerHTML = '';
-  
-  STATE.solicitudes.forEach(s => {
-    let estadoHTML;
-    if (s.estado === 'Pendiente') estadoHTML = '<span class="estado-badge estado-pendiente">⏳ Pendiente</span>';
-    else if (s.estado === 'Aprobada') estadoHTML = '<span class="estado-badge estado-aprobado">✓ Aprobada</span>';
-    else estadoHTML = '<span class="estado-badge estado-rechazado">✕ Rechazada</span>';
+    elements.dniInput.addEventListener('keypress', e => { if (e.key === 'Enter') validarDNI(); });
+    elements.btnStep1.addEventListener('click', () => { if (elements.equipoSelect.value) loadJugadores(elements.equipoSelect.value); });
+    elements.btnStep2.addEventListener('click', () => { if (state.selectedJugador) { goToStep(3); elements.dniInput.focus(); } });
+    elements.btnStep3.addEventListener('click', validarDNI);
+    elements.btnGuardar.addEventListener('click', guardarDatos);
+    elements.btnBack2.addEventListener('click', () => goToStep(1));
+    elements.btnBack3.addEventListener('click', () => goToStep(2));
+    elements.btnBack4.addEventListener('click', resetForm);
+    elements.btnNuevo.addEventListener('click', resetForm);
     
-    let acciones = '';
-    if (s.estado === 'Pendiente') {
-      acciones = `
-        <button class="btn btn-sm btn-success" onclick="aprobarSolicitud('${s.id}')">✓ Aprobar</button>
-        <button class="btn btn-sm btn-danger" onclick="rechazarSolicitud('${s.id}')">✕ Rechazar</button>
-      `;
-    }
+    elements.adminLink.addEventListener('click', showAdminPanel);
+    elements.btnAdminBack.addEventListener('click', hideAdminPanel);
+    elements.btnAdminLogout.addEventListener('click', hideAdminPanel);
+    elements.btnAdminLogin.addEventListener('click', adminLoginFn);
+    elements.btnRefresh.addEventListener('click', loadEstadoEquipos);
+    elements.adminClave.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginFn(); });
     
-    tbody.innerHTML += `
-      <tr>
-        <td>#${s.id}</td>
-        <td class="jugador-nombre">${s.nombre}</td>
-        <td>${s.equipoId}</td>
-        <td>${s.dni || '-'}</td>
-        <td>${estadoHTML}</td>
-        <td>${s.fechaSolicitud}</td>
-        <td class="btn-actions">${acciones}</td>
-      </tr>
-    `;
-  });
-  
-  if (STATE.solicitudes.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">📋</div><h3>No hay solicitudes</h3></td></tr>';
-  }
-}
-
-async function cargarConfig() {
-  showLoading('Cargando configuración...');
-  const res = await api('getParametros');
-  hideLoading();
-  if (res.ok) {
-    STATE.parametros = res.parametros;
-    STATE.cache.config = Date.now();
-  }
-  renderConfig();
-}
-
-function renderConfig() {
-  // Si no hay datos, cargar
-  if (!STATE.parametros) {
-    cargarConfig();
-    return;
-  }
-  
-  const p = STATE.parametros;
-  
-  // Social
-  document.getElementById('config-social').value = p.CUOTA_SOCIAL || '16000';
-  
-  // Superior
-  document.getElementById('config-deportiva-superior').value = p.CUOTA_DEPORTIVA_SUPERIOR || '20000';
-  document.getElementById('config-completa-superior').value = p.CUOTA_COMPLETA_SUPERIOR || '36000';
-  
-  // Infantiles
-  document.getElementById('config-deportiva-infantiles').value = p.CUOTA_DEPORTIVA_INFANTILES || '15000';
-  document.getElementById('config-completa-infantiles').value = p.CUOTA_COMPLETA_INFANTILES || '31000';
-  document.getElementById('config-hijo-infantiles').value = p.CUOTA_HIJO_SOCIO_INFANTILES || '15000';
-  
-  // Sub 8/12
-  document.getElementById('config-deportiva-sub8-12').value = p.CUOTA_DEPORTIVA_SUB8_12 || '10000';
-  document.getElementById('config-completa-sub8-12').value = p.CUOTA_COMPLETA_SUB8_12 || '26000';
-  document.getElementById('config-hijo-sub8-12').value = p.CUOTA_HIJO_SOCIO_SUB8_12 || '10000';
-  
-  // Sub 14/16
-  document.getElementById('config-deportiva-sub14-16').value = p.CUOTA_DEPORTIVA_SUB14_16 || '14000';
-  document.getElementById('config-completa-sub14-16').value = p.CUOTA_COMPLETA_SUB14_16 || '30000';
-  document.getElementById('config-hijo-sub14-16').value = p.CUOTA_HIJO_SOCIO_SUB14_16 || '14000';
-  
-  // Bonificado
-  document.getElementById('config-bonificado').value = p.CUOTA_BONIFICADO || '0';
-}
-
-async function guardarConfig() {
-  showLoading('Guardando configuración...');
-  
-  const params = {
-    CUOTA_SOCIAL: document.getElementById('config-social').value,
-    
-    CUOTA_DEPORTIVA_SUPERIOR: document.getElementById('config-deportiva-superior').value,
-    CUOTA_COMPLETA_SUPERIOR: document.getElementById('config-completa-superior').value,
-    
-    CUOTA_DEPORTIVA_INFANTILES: document.getElementById('config-deportiva-infantiles').value,
-    CUOTA_COMPLETA_INFANTILES: document.getElementById('config-completa-infantiles').value,
-    CUOTA_HIJO_SOCIO_INFANTILES: document.getElementById('config-hijo-infantiles').value,
-    
-    CUOTA_DEPORTIVA_SUB8_12: document.getElementById('config-deportiva-sub8-12').value,
-    CUOTA_COMPLETA_SUB8_12: document.getElementById('config-completa-sub8-12').value,
-    CUOTA_HIJO_SOCIO_SUB8_12: document.getElementById('config-hijo-sub8-12').value,
-    
-    CUOTA_DEPORTIVA_SUB14_16: document.getElementById('config-deportiva-sub14-16').value,
-    CUOTA_COMPLETA_SUB14_16: document.getElementById('config-completa-sub14-16').value,
-    CUOTA_HIJO_SOCIO_SUB14_16: document.getElementById('config-hijo-sub14-16').value,
-    
-    CUOTA_BONIFICADO: document.getElementById('config-bonificado').value
-  };
-  
-  const res = await api('setParametros', params);
-  hideLoading();
-  
-  if (res.ok) {
-    toast('✅ Configuración guardada', 'success');
-    STATE.parametros = { ...STATE.parametros, ...params };
-  } else {
-    toast(res.msg || 'Error al guardar', 'error');
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// ACCIONES ADMIN
-// ══════════════════════════════════════════════════════════════════
-async function aprobarPago(pagoId) {
-  showLoading('Aprobando pago...');
-  const res = await api('aprobar', { pagoId });
-  hideLoading();
-  if (res.ok) {
-    toast('✅ Pago aprobado', 'success');
-    cargarResumenAdmin();
-    cargarComprobantesAdmin();
-  } else {
-    toast(res.msg || 'Error al aprobar', 'error');
-  }
-}
-
-function abrirModalRechazar(pagoId, jugadorNombre, mes, equipoId) {
-  document.getElementById('rechazar-id').value = pagoId;
-  document.getElementById('rechazar-obs').value = '';
-  document.getElementById('rech-jugador').textContent = jugadorNombre || '—';
-  document.getElementById('rech-mes').textContent = mes || '—';
-  document.getElementById('rech-equipo').textContent = (equipoId || '').replace(/_/g, ' ');
-  document.getElementById('rechazar-jugador-nombre').value = jugadorNombre || '';
-  document.getElementById('rechazar-equipo-id').value = equipoId || '';
-  document.getElementById('modal-rechazar').classList.add('active');
-}
-
-async function confirmarRechazo() {
-  const pagoId = document.getElementById('rechazar-id').value;
-  const obs = document.getElementById('rechazar-obs').value.trim();
-  
-  if (!obs) {
-    toast('El motivo del rechazo es obligatorio', 'error');
-    return;
-  }
-  
-  const btn = document.getElementById('btn-confirmar-rechazo');
-  btn.disabled = true;
-  btn.textContent = 'Rechazando...';
-  
-  showLoading('Rechazando pago...');
-  const res = await api('rechazar', { pagoId, obs });
-  hideLoading();
-  
-  btn.disabled = false;
-  btn.textContent = 'Rechazar';
-  
-  if (res.ok) {
-    toast('Pago rechazado', 'success');
-    cerrarModal('modal-rechazar');
-    cargarResumenAdmin();
-    cargarComprobantesAdmin();
-  } else {
-    toast(res.msg || 'Error al rechazar', 'error');
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// VISOR MOBILE FULLSCREEN (Admin)
-// ══════════════════════════════════════════════════════════════════
-let _visorMobileData = null;
-let _visorZoomState = null;
-
-async function abrirVisorMobile(pagoId, pago) {
-  const overlay = document.getElementById('visor-mobile-overlay');
-  const content = document.getElementById('visor-mobile-content');
-  const btnAprobar = document.getElementById('visor-btn-aprobar');
-  const btnRechazar = document.getElementById('visor-btn-rechazar');
-  
-  // Mostrar overlay con loading
-  overlay.classList.add('active');
-  content.innerHTML = '<div style="color:#fff;font-size:0.9rem">Cargando comprobante...</div>';
-  document.getElementById('visor-jugador').textContent = pago.nombre || '—';
-  document.getElementById('visor-equipo-mes').textContent = `${(pago.equipoId || '').replace(/_/g,' ')} · ${pago.mes || ''}`;
-  document.getElementById('visor-estado').textContent = '—';
-  btnAprobar.style.display = 'none';
-  btnRechazar.style.display = 'none';
-  
-  // Bloquear scroll del body
-  document.body.style.overflow = 'hidden';
-  
-  try {
-    // Llamar a la API para obtener el archivo en base64
-    const data = await api('getComprobante', { id: pagoId });
-    
-    if (!data.ok) {
-      content.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">Error: ${data.msg || 'No se pudo cargar'}</div>`;
-      return;
-    }
-    
-    const c = data.comprobante;
-    _visorMobileData = { pagoId, pago: c };
-    
-    // Actualizar header con datos del comprobante
-    document.getElementById('visor-jugador').textContent = c.jugadorNombre || pago.nombre || '—';
-    document.getElementById('visor-equipo-mes').textContent = `${(c.equipoId || '').replace(/_/g,' ')} · ${c.mes || ''}`;
-    
-    // Estado badge
-    const estadoEl = document.getElementById('visor-estado');
-    const estadoColors = {
-      'Aprobado': { bg: '#dcfce7', color: '#15803d' },
-      'Pendiente': { bg: '#fef9c3', color: '#854d0e' },
-      'Rechazado': { bg: '#fee2e2', color: '#b91c1c' }
-    };
-    const ec = estadoColors[c.estado] || { bg: '#f3f4f6', color: '#374151' };
-    estadoEl.textContent = c.estado || '—';
-    estadoEl.style.background = ec.bg;
-    estadoEl.style.color = ec.color;
-    
-    // Botones según estado
-    if (c.estado !== 'Aprobado') {
-      btnAprobar.style.display = 'flex';
-    }
-    if (c.estado !== 'Rechazado') {
-      btnRechazar.style.display = 'flex';
-    }
-    
-    // Mostrar contenido (imagen o PDF en base64)
-    if (c.archivoB64) {
-      if (c.esImagen) {
-        content.innerHTML = `
-          <img id="visor-mobile-img" 
-               src="data:${c.mimeType};base64,${c.archivoB64}" 
-               alt="Comprobante"
-               style="max-width:100%;max-height:100%;object-fit:contain;">`;
-        setTimeout(() => initVisorZoom(), 100);
-      } else {
-        // PDF
-        content.innerHTML = `
-          <embed src="data:application/pdf;base64,${c.archivoB64}" 
-                 type="application/pdf"
-                 style="width:100%;height:100%;background:#fff;">`;
-      }
-    } else if (c.driveUrl) {
-      // Fallback: si no hay base64, mostrar link a Drive
-      content.innerHTML = `
-        <div style="color:#fff;text-align:center;padding:40px;">
-          <p style="margin-bottom:20px;">No se pudo cargar la vista previa</p>
-          <a href="${c.driveUrl}" target="_blank" style="display:inline-block;padding:12px 24px;background:#56c596;color:#333;border-radius:10px;font-weight:600;text-decoration:none;">
-            Abrir en Drive
-          </a>
-        </div>`;
-    } else {
-      content.innerHTML = '<div style="color:#fff;text-align:center;padding:40px">Sin archivo disponible</div>';
-    }
-    
-  } catch(e) {
-    content.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">Error: ${e.message}</div>`;
-  }
-}
-
-function cerrarVisorMobile() {
-  const overlay = document.getElementById('visor-mobile-overlay');
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
-  _visorMobileData = null;
-  _visorZoomState = null;
-}
-
-function visorAprobar() {
-  if (!_visorMobileData) return;
-  const { pagoId } = _visorMobileData;
-  cerrarVisorMobile();
-  aprobarPago(pagoId);
-}
-
-function visorRechazar() {
-  if (!_visorMobileData) return;
-  const { pagoId, pago } = _visorMobileData;
-  cerrarVisorMobile();
-  abrirModalRechazar(pagoId, pago.jugadorNombre || pago.nombre, pago.mes, pago.equipoId);
-}
-
-// Zoom táctil para imágenes
-function initVisorZoom() {
-  const img = document.getElementById('visor-mobile-img');
-  if (!img) return;
-  
-  _visorZoomState = {
-    scale: 1,
-    translateX: 0,
-    translateY: 0,
-    lastDistance: 0,
-    lastX: 0,
-    lastY: 0,
-    isPinching: false
-  };
-  
-  const content = document.getElementById('visor-mobile-content');
-  
-  // Doble tap para zoom
-  let lastTap = 0;
-  img.addEventListener('touchend', (e) => {
-    const now = Date.now();
-    if (now - lastTap < 300 && e.touches.length === 0) {
-      e.preventDefault();
-      // Toggle entre 1x y 2.5x
-      if (_visorZoomState.scale === 1) {
-        _visorZoomState.scale = 2.5;
-      } else {
-        _visorZoomState.scale = 1;
-        _visorZoomState.translateX = 0;
-        _visorZoomState.translateY = 0;
-      }
-      applyVisorTransform(img);
-    }
-    lastTap = now;
-  });
-  
-  // Pinch zoom
-  content.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-      _visorZoomState.isPinching = true;
-      _visorZoomState.lastDistance = getDistance(e.touches);
-    } else if (e.touches.length === 1 && _visorZoomState.scale > 1) {
-      _visorZoomState.lastX = e.touches[0].clientX;
-      _visorZoomState.lastY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-  
-  content.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2 && _visorZoomState.isPinching) {
-      const distance = getDistance(e.touches);
-      const delta = distance / _visorZoomState.lastDistance;
-      _visorZoomState.scale = Math.min(5, Math.max(0.5, _visorZoomState.scale * delta));
-      _visorZoomState.lastDistance = distance;
-      applyVisorTransform(img);
-    } else if (e.touches.length === 1 && _visorZoomState.scale > 1) {
-      // Pan cuando hay zoom
-      const deltaX = e.touches[0].clientX - _visorZoomState.lastX;
-      const deltaY = e.touches[0].clientY - _visorZoomState.lastY;
-      _visorZoomState.translateX += deltaX;
-      _visorZoomState.translateY += deltaY;
-      _visorZoomState.lastX = e.touches[0].clientX;
-      _visorZoomState.lastY = e.touches[0].clientY;
-      applyVisorTransform(img);
-    }
-  }, { passive: true });
-  
-  content.addEventListener('touchend', () => {
-    _visorZoomState.isPinching = false;
-  });
-}
-
-function getDistance(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-function applyVisorTransform(img) {
-  if (!_visorZoomState) return;
-  img.style.transform = `translate(${_visorZoomState.translateX}px, ${_visorZoomState.translateY}px) scale(${_visorZoomState.scale})`;
-}
-
-// Función para abrir visor (detecta mobile vs desktop)
-function abrirModalVer(pagoId, pago) {
-  const esMobile = window.innerWidth < 768;
-  
-  if (esMobile && STATE.rol === 'admin') {
-    // Usar visor fullscreen en mobile para admin
-    abrirVisorMobile(pagoId, pago);
-  } else {
-    // Desktop: abrir link directo
-    if (pago.driveUrl) {
-      window.open(pago.driveUrl, '_blank');
-    }
-  }
-}
-
-async function aprobarSolicitud(solicitudId) {
-  showLoading('Aprobando solicitud...');
-  const res = await api('aprobarSolicitud', { solicitudId });
-  hideLoading();
-  if (res.ok) {
-    toast('✅ Solicitud aprobada, jugador creado', 'success');
-    cargarSolicitudesAdmin();
-    cargarResumenAdmin();
-  } else {
-    toast(res.msg || 'Error al aprobar', 'error');
-  }
-}
-
-async function rechazarSolicitud(solicitudId) {
-  const obs = prompt('Motivo del rechazo (opcional):');
-  showLoading('Rechazando solicitud...');
-  const res = await api('rechazarSolicitud', { solicitudId, obs: obs || '' });
-  hideLoading();
-  if (res.ok) {
-    toast('Solicitud rechazada', 'success');
-    cargarSolicitudesAdmin();
-    cargarResumenAdmin();
-  } else {
-    toast(res.msg || 'Error al rechazar', 'error');
-  }
-}
-
-async function eliminarJugador(jugadorId, nombre) {
-  if (!confirm(`¿Eliminar a ${nombre}?`)) return;
-  
-  showLoading('Eliminando jugador...');
-  const res = await api('bajaJugador', { jugadorId });
-  hideLoading();
-  if (res.ok) {
-    toast('Jugador eliminado', 'success');
-    cargarJugadoresAdmin();
-  } else {
-    toast(res.msg || 'Error al eliminar', 'error');
-  }
-}
-
-// Modal Alta Admin
-function abrirModalAltaAdmin() {
-  const select = document.getElementById('alta-admin-equipo');
-  select.innerHTML = '<option value="">Seleccionar...</option>';
-  STATE.equipos.forEach(eq => {
-    select.innerHTML += `<option value="${eq.id}">${eq.nombre}</option>`;
-  });
-  
-  document.getElementById('form-alta-admin').reset();
-  document.getElementById('modal-alta-admin').classList.add('active');
-}
-
-async function altaJugadorAdmin(e) {
-  e.preventDefault();
-  
-  showLoading('Agregando jugador...');
-  const res = await api('altaJugadorAdmin', {
-    equipoId: document.getElementById('alta-admin-equipo').value,
-    nombre: document.getElementById('alta-admin-nombre').value,
-    dni: document.getElementById('alta-admin-dni').value,
-    fechaNac: document.getElementById('alta-admin-fechanac').value,
-    tipoCuota: document.getElementById('alta-admin-tipocuota').value
-  });
-  hideLoading();
-  
-  if (res.ok) {
-    toast('✅ Jugador agregado', 'success');
-    cerrarModal('modal-alta-admin');
-    cargarJugadoresAdmin();
-  } else {
-    toast(res.msg || 'Error al agregar', 'error');
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════════════════════════════
-function cerrarModal(id) {
-  document.getElementById(id).classList.remove('active');
-}
-
-function toast(msg, type = 'success') {
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  toast.innerHTML = `
-    <span class="toast-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
-    <span class="toast-message">${msg}</span>
-    <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
-  `;
-  container.appendChild(toast);
-  
-  setTimeout(() => toast.remove(), 5000);
-}
-
-// Cerrar modales con Escape
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-  }
-});
-
-// Cerrar modal al hacer clic fuera
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) overlay.classList.remove('active');
-  });
-});
-</script>
-
+    document.addEventListener('DOMContentLoaded', loadEquipos);
+  </script>
 </body>
 </html>
